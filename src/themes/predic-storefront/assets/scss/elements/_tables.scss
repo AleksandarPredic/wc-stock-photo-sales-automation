@@ -1,0 +1,22 @@
+table {
+	border-spacing: 0;
+	margin: 0 0 1.5em;
+	width: 100%;
+	border: 1px solid $color__text-secondary;
+
+	td,
+	th {
+		font-weight: 400;
+		text-align: left;
+		color: $color__text-main;
+		padding: 5px 10px;
+	}
+
+	th {
+		font-weight: 600;
+	}
+
+	thead {
+		border: 1px solid $color__text-secondary;
+	}
+}

@@ -1,0 +1,51 @@
+{
+  "name": "predic-wc-photography",
+  "version": "0.0.1",
+  "description": "Predic WooCommerce photography",
+  "scripts": {
+    "dev": "npm run development",
+    "development": "cross-env BABEL_ENV=default webpack --watch --watch-poll",
+    "prod": "npm run production",
+    "production": "cross-env BABEL_ENV=default NODE_ENV=production webpack -p",
+    "lint": "concurrently \"npm run lint-scripts\" \"npm run lint-styles\"",
+    "lint-scripts": "wp-scripts lint-js ./src/PredicWCPhoto/assets/js",
+    "lint-scripts:fix": "npm run lint-scripts -- --fix",
+    "lint-styles": "wp-scripts lint-style './src/PredicWCPhoto/assets/**/*.scss'",
+    "lint-styles:fix": "npm run lint-styles -- --fix"
+  },
+  "author": "Aleksandar Predic",
+  "license": "ISC",
+  "keywords": [
+    "WordPress",
+    "Plugins",
+    "Predic WooCommerce photography"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
+    "@wordpress/scripts": "^5.0.0",
+    "autoprefixer": "^9.6.1",
+    "babel-loader": "^8.0.6",
+    "concurrently": "^4.1.2",
+    "cross-env": "^6.0.0",
+    "css-loader": "^3.2.0",
+    "eslint": "^6.4.0",
+    "eslint-loader": "^3.0.0",
+    "friendly-errors-webpack-plugin": "^1.7.0",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.12.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^8.0.0",
+    "style-loader": "^1.0.0",
+    "stylelint": "^11.0.0",
+    "stylelint-config-recommended-scss": "^4.0.0",
+    "stylelint-config-standard": "^19.0.0",
+    "stylelint-scss": "^3.11.1",
+    "stylelint-webpack-plugin": "^0.10.5",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.40.2",
+    "webpack-cli": "^3.3.9"
+  },
+  "dependencies": {}
+}

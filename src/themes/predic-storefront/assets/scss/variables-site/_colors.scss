@@ -1,0 +1,31 @@
+$color__white: #fff;
+$color__f2: #f2f2f2;
+
+$color__background-body: $color__white;
+$color__background-screen: #f1f1f1; // Accessibility text
+$color__background-hr: #ccc;
+$color__background-button: #647c9f;
+$color__background-button-hover: #89a5d5;
+$color__background-pre: #eee;
+$color__background-ins: #fff9c0;
+
+$color__main: #f00;
+$color__secondary: #8aa6d6;
+$color__main-hover: $color__secondary;
+$color__secondary-hover: $color__main;
+$color__text-main: #222;
+$color__text-secondary: #666;
+$color__text-screen: $color__text-main; // Accessibility text
+$color__text-input: $color__text-secondary;
+$color__text-input-focus: $color__text-secondary;
+$color__text-input-placeholder: lighten($color__text-secondary, 20%);
+$color__link: $color__secondary;
+$color__link-visited: $color__main;
+$color__link-hover: $color__main;
+
+$color__border: #d2d2d2;
+$color__border-input-active: $color__background-button-hover;
+$color__border-input: $color__border; /* Not using at the moment */
+$color__border-abbr: $color__text-secondary;
+
+$color__white: #fff;

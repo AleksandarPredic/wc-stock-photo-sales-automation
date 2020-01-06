@@ -1,0 +1,115 @@
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+input[type="tel"],
+input[type="range"],
+input[type="date"],
+input[type="month"],
+input[type="week"],
+input[type="time"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="color"],
+textarea {
+	font-size: 1.4rem;
+	font-weight: 400;
+	color: $color__text-secondary;
+	padding: 5px 15px;
+	border: 1px solid $color__border;
+	outline: none;
+	border-radius: 5px;
+
+	@include global-transition(all);
+
+	width: 100%;
+	max-width: 500px;
+
+	&:focus,
+	&:active {
+		color: $color__text-input-focus;
+		border-color: $color__border-input-active;
+	}
+
+	&:not(textarea) {
+		height: 54px;
+	}
+}
+
+textarea {
+	width: 100%;
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+	color: $color__text-input-placeholder;
+}
+
+::-moz-placeholder { /* Firefox 19+ */
+	color: $color__text-input-placeholder;
+}
+
+:-ms-input-placeholder { /* IE 10+ */
+	color: $color__text-input-placeholder;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+	color: $color__text-input-placeholder;
+}
+
+select {
+	font-size: 1.4rem;
+	font-weight: 400;
+	color: $color__text-secondary;
+	padding: 1rem 7rem 1.35rem 1.7rem;
+	outline: none;
+	border: none;
+	background-color: $color__f2;
+
+	@include global-transition(all);
+
+	height: 54px;
+}
+
+.predic-storefront-form__select-wrapper {
+	position: relative;
+	box-sizing: border-box;
+	display: inline-block;
+	overflow: hidden;
+	border: 1px solid $color__border;
+	border-radius: 5px;
+
+	&::before {
+		content: '';
+		display: block;
+		height: 8px;
+		width: 8px;
+		border-bottom: 1px solid $color__text-secondary;
+		border-right: 1px solid $color__text-secondary;
+		transform: rotate(45deg);
+		position: absolute;
+		top: calc(50% - 6px);
+		right: 2rem;
+		z-index: 0;
+	}
+
+	select {
+		width: calc(100% + 15px);
+		background-color: transparent;
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+
+		option {
+			color: $color__main;
+			font-weight: 600;
+		}
+	}
+}
+
+label,
+input[type="checkbox"],
+input[type="radio"] {
+	margin: 0 5px 5px 0;
+}
