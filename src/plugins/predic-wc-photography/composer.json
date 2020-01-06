@@ -1,0 +1,21 @@
+{
+	"name": "aleksandarpredic/predic-wc-photography",
+	"description": "Custom WooCommerce photography plugin",
+	"type": "project",
+	"authors": [
+		{
+			"name": "aleksandarpredic",
+			"email": "aleksandar.predic@gmail.com"
+		}
+	],
+	"minimum-stability": "dev",
+	"require": {
+		"php": ">=7.1.0",
+		"ext-json": "*"
+	},
+	"autoload": {
+		"psr-4": {
+			"PredicWCPhoto\\": "src/"
+		}
+	}
+}
