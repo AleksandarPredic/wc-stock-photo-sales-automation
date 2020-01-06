@@ -20,11 +20,10 @@ if (! defined('ABSPATH')) {
 if (! class_exists('PredicWCPhoto_Plugin')) {
     // Setup class autoloader.
     require_once plugin_dir_path(__FILE__) . 'vendor/autoload.php';
-    \PredicWCPhoto\Autoloader::register();
 
     // Load plugin.
     $predic_wc_photography_plugin = new \PredicWCPhoto\Plugin();
-    add_action('plugins_loaded', [ $predic_wc_photography_plugin, 'load' ], 1);
+    add_action('plugins_loaded', [ $predic_wc_photography_plugin, 'load' ], 20);
 
     if (! function_exists('predic_wc_photography_helpers')) {
         /**

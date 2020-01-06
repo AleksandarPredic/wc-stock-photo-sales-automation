@@ -11,6 +11,10 @@
 namespace PredicWCPhoto;
 
 // Do not allow directly accessing this file.
+use PredicWCPhoto\Admin\AdminMenuPages;
+use PredicWCPhoto\Controllers\ImporterController;
+use PredicWCPhoto\Lib\Importer;
+
 if (! defined('ABSPATH')) {
     exit('Direct script access denied.');
 }
@@ -86,7 +90,18 @@ class Plugin
         /**
          * Enqueue scripts and styles.
          */
-        new Scripts();
+        // TODO: Enable or delete scripts
+        //new Scripts();
+
+        /**
+         * Admin submenu page
+         */
+        AdminMenuPages::getInstance()->build();
+
+        /**
+         * Importer controller
+         */
+		new ImporterController(new Importer());
 
         // Set all as loaded.
         $this->loaded = true;
