@@ -37,7 +37,7 @@ class Importer implements ImporterInterface
      * Import to variable product from photo and add global product attributes
 	 * Add zip for download for both variations
      * Parse metadata and add tags and categories
-     * Make delete product button to delete linked images and zip files. Check if product delete zip files when deleted
+     * Make delete product button to delete linked images and zip files. Check if product delete zip files when deleted or hOOK TO PRODUCT DELETE
      */
 
     public function __construct()
