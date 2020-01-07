@@ -3,11 +3,13 @@
 namespace PredicWCPhoto\Lib;
 
 use Intervention\Image\ImageManagerStatic as Image;
-use Spatie\ImageOptimizer\OptimizerChainFactory as ImageOptimizer;
 use PredicWCPhoto\Contracts\ImporterInterface;
+use Spatie\ImageOptimizer\OptimizerChainFactory as ImageOptimizer;
 
 class Importer implements ImporterInterface
 {
+    const IMAGE_MAX_WIDTH = 1920;
+    const IMAGE_QUALITY   = 80;
     // TODO: Do all of this next
 
     /**
@@ -15,21 +17,29 @@ class Importer implements ImporterInterface
      */
     private $watermarkImagePath;
 
-    const IMAGE_MAX_WIDTH = 1920;
-    const IMAGE_QUALITY = 75;
+	/**
+	 * @var string
+	 */
+	private $pluginSlug;
 
-    /**
+	/**
+	 * @var \WC_Importer_Interface
+	 */
+	private $wcImporter;
+
+	/**
      * Leave original file to attach to downloadable product
-     * Resize image for frontend usage packagist lib
-     * Add watermark
      * Import to variable product from photo and add global product attributes
+	 * Add zip for download for both variations
      * Parse metadata and add tags and categories
      * Make delete product button to delete linked images and zip files. Check if product delete zip files when deleted
      */
 
     public function __construct()
     {
-        $this->watermarkImagePath = predic_wc_photography_helpers()->config->getPluginImagesPath() . '/importer/watermark.png';
+    	$config = predic_wc_photography_helpers()->config;
+        $this->watermarkImagePath = $config->getPluginImagesPath() . '/importer/watermark.png';
+        $this->pluginSlug = $config->getPluginSlug();
     }
 
     /**
@@ -39,17 +49,27 @@ class Importer implements ImporterInterface
     {
         $result = [];
 
-        // TODO: Create folder for manipulation so we can manually delete leftover images
+		// Set temporary folder to manipulate images
         $uploadDir     = wp_upload_dir();
-        $uploadDirPath = $uploadDir['basedir'];
+        $uploadDirPath = $uploadDir['basedir'] . '/' . sanitize_file_name($this->pluginSlug);
+
+		if (!file_exists($uploadDirPath)) {
+			mkdir($uploadDirPath, 0755, true);
+		}
 
         foreach ($photos as $photo) {
-            var_dump($photo);
+			$wcImporter = new WCImporter();
 
-            $filename = $photo['filename'];
+			$filename = $photo['filename'];
 
+            $tmpUploadPath       = $photo['tmp_name'];
             $tmpFilePath         = $uploadDirPath . '/' . $filename;
-            $originalUploadedImg = $photo['tmp_name']; // or use backup for file
+
+            // Read metadata
+            // TODO: handle metadata reading
+            /*$metaData = exif_read_data($tmpUploadPath);
+            var_dump($metaData);*/
+
 
             // Delete previous created file if doing this second time and file exists
             if (file_exists($tmpFilePath)) {
@@ -57,30 +77,35 @@ class Importer implements ImporterInterface
             }
 
             // open an image file
+            /**
+             * https://packagist.org/packages/intervention/image
+             */
+            $img = Image::make($tmpUploadPath);
+
+
 			/**
-			 * https://packagist.org/packages/intervention/image
+			 * Process image before product
 			 */
-            $img = Image::make($photo['tmp_name']);
 
             // Resize
-			$img = $this->resizeImg($img);
+            $img = $this->resizeImg($img);
 
             // insert a watermark
             $img->insert(Image::make($this->watermarkImagePath)->resize($img->getWidth(), null), 'center');
 
             // save image in desired format
-            $img->save($tmpFilePath, 75);
+            $img->save($tmpFilePath, self::IMAGE_QUALITY);
 
             // Optimize images
-			/**
-			 * TODO: Make sure server has installed or nothing will happen
-			 *
-			 * apt-get install jpegoptim
-			 *
-			 * https://packagist.org/packages/spatie/image-optimizer
-			 */
-			$optimizerChain = ImageOptimizer::create();
-			$optimizerChain->optimize($tmpFilePath);
+            /**
+             * TODO: Make sure server has installed or nothing will happen
+             *
+             * apt-get install jpegoptim
+             *
+             * https://packagist.org/packages/spatie/image-optimizer
+             */
+            $optimizerChain = ImageOptimizer::create();
+            $optimizerChain->optimize($tmpFilePath);
 
             $fileArray = [
                 'name'     => $filename,
@@ -93,26 +118,50 @@ class Importer implements ImporterInterface
                 $fileArray
             );
 
-			$result[$fileArray['name']] = $imgaeId;
+            $result[$fileArray['name']] = $imgaeId;
 
             // Delete tmp file, if media_handle_sideload didn't deleted it
             if (file_exists($tmpFilePath)) {
                 unlink($tmpFilePath);
             }
+
+
+			/**
+			 * Create products first before any image manipulation
+			 */
+			// Test product creation
+			$basename = basename($filename, sprintf('.%s', $img->extension));
+
+			$wcImporter->setData(
+				ucfirst(str_replace('-', ' ', $basename)),
+				basename($basename),
+				'short description',
+				'description',
+				[
+					99, // Regular price
+					999 // Extended price
+				],
+				$imgaeId
+			);
+
+			// Unhandled exception
+			$parentProduct = $wcImporter->import();
+			var_dump($parentProduct);
         }
+
 
         var_dump($result);
         die();
     }
 
-	/**
-	 * @param \Intervention\Image\Image $img
-	 * @return \Intervention\Image\Image
-	 */
+    /**
+     * @param \Intervention\Image\Image $img
+     * @return \Intervention\Image\Image
+     */
     private function resizeImg(\Intervention\Image\Image $img)
     {
-        $width  = $img->getWidth();
-        $height = $img->getHeight();
+        $width    = $img->getWidth();
+        $height   = $img->getHeight();
         $maxWidth = self::IMAGE_MAX_WIDTH;
 
         if ($width >=  $height) {
@@ -122,16 +171,16 @@ class Importer implements ImporterInterface
 
             $img->resize($maxWidth, null, function ($constraint) {
                 $constraint->aspectRatio();
-				$constraint->upsize();
+                $constraint->upsize();
             });
 
             return $img;
         }
 
-		$img->resize(null, $maxWidth, function ($constraint) {
-			$constraint->aspectRatio();
-			$constraint->upsize();
-		});
+        $img->resize(null, $maxWidth, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        });
 
         return $img;
     }

@@ -6,8 +6,10 @@ interface ImporterInterface
 {
 
     /**
+	 * Return parent product id
 	 * @param array $photos
-     * @return bool
+     * @return int
+	 * @throws \Exception
      */
     public function import($photos);
 }
