@@ -100,6 +100,9 @@ class ImporterController
 
         // TODO: Nonce check
 
+		// TODO: make ajax method to call this for each uploaded image as we can't handle more than 10 images - safe way
+		// and to avoid this Warning: Maximum number of allowable file uploads has been exceeded in Unknown on line 0
+
         if (! isset($_FILES['files']['name']) || empty($_FILES['files']['name'])) {
         	throw new \Exception(
 				esc_html__('No files selected!', 'predic-wc-photography'),
@@ -120,7 +123,7 @@ class ImporterController
 		for ($i = 0; $i < count($_FILES['files']['name']); $i++) {
 
 			$photos[] = [
-				'filename' => strtolower(sanitize_file_name($_FILES['files']['name'][$i])),
+				'filename' => $_FILES['files']['name'][$i],
 				'tmp_name' => $_FILES['files']['tmp_name'][$i]
 			];
 

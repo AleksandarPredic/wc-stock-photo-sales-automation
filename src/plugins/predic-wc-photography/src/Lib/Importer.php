@@ -23,6 +23,11 @@ class Importer implements ImporterInterface
 	private $pluginSlug;
 
 	/**
+	 * @var string
+	 */
+	private $downloadableFilesUploadDirPath = 'woocommerce-downloadable-files';
+
+	/**
 	 * @var \WC_Importer_Interface
 	 */
 	private $wcImporter;
@@ -51,19 +56,44 @@ class Importer implements ImporterInterface
 
 		// Set temporary folder to manipulate images
         $uploadDir     = wp_upload_dir();
-        $uploadDirPath = $uploadDir['basedir'] . '/' . sanitize_file_name($this->pluginSlug);
+        $tmpUploadDirPath = $uploadDir['basedir'] . '/' . sanitize_file_name($this->pluginSlug) . '-tmp';
+        $downloadableFilesUploadDirPath = $uploadDir['basedir'] . '/' . sanitize_file_name($this->downloadableFilesUploadDirPath);
 
-		if (!file_exists($uploadDirPath)) {
-			mkdir($uploadDirPath, 0755, true);
+		if (!file_exists($tmpUploadDirPath)) {
+			mkdir($tmpUploadDirPath, 0755, true);
+		}
+
+		if (!file_exists($downloadableFilesUploadDirPath)) {
+			mkdir($downloadableFilesUploadDirPath, 0755, true);
 		}
 
         foreach ($photos as $photo) {
 			$wcImporter = new WCImporter();
 
-			$filename = $photo['filename'];
-
+			$filename = str_replace('_', '-', strtolower(sanitize_file_name($photo['filename'])));
+			$pathInfo = pathinfo($filename);
             $tmpUploadPath       = $photo['tmp_name'];
-            $tmpFilePath         = $uploadDirPath . '/' . $filename;
+            $tmpFilePath         = $tmpUploadDirPath . '/' . $filename;
+			$productSlug = basename($filename, sprintf('.%s', $pathInfo['extension']));
+			$wcProduct = wc_get_product(wc_get_product_id_by_sku($productSlug)); // Check if product exists
+			$wcProductImageId = is_a($wcProduct, '\WC_Product') ? $wcProduct->get_image_id() : false;
+
+			// Delete image attached and re upload new so we can update new metadata
+			if (! empty($wcProductImageId)) {
+				$bool = false !== wp_delete_post( $wcProductImageId, true );
+
+				if ( ! $bool ) {
+					throw new \Exception(
+						sprintf(
+							esc_html__( 'Error deleting product image with id %s.', 'predic-wc-photography' ),
+							$this->product->get_id()
+						),
+						500
+					);
+
+				}
+			}
+
 
             // Read metadata
             // TODO: handle metadata reading
@@ -81,7 +111,6 @@ class Importer implements ImporterInterface
              * https://packagist.org/packages/intervention/image
              */
             $img = Image::make($tmpUploadPath);
-
 
 			/**
 			 * Process image before product
@@ -118,23 +147,19 @@ class Importer implements ImporterInterface
                 $fileArray
             );
 
-            $result[$fileArray['name']] = $imgaeId;
-
             // Delete tmp file, if media_handle_sideload didn't deleted it
             if (file_exists($tmpFilePath)) {
                 unlink($tmpFilePath);
             }
 
 
+
 			/**
 			 * Create products first before any image manipulation
 			 */
-			// Test product creation
-			$basename = basename($filename, sprintf('.%s', $img->extension));
-
 			$wcImporter->setData(
-				ucfirst(str_replace('-', ' ', $basename)),
-				basename($basename),
+				ucfirst(str_replace('-', ' ', $productSlug)),
+				$productSlug,
 				'short description',
 				'description',
 				[
@@ -146,7 +171,61 @@ class Importer implements ImporterInterface
 
 			// Unhandled exception
 			$parentProduct = $wcImporter->import();
-			var_dump($parentProduct);
+			$parentProductId = $parentProduct['id'];
+
+			if (! isset($parentProduct['children']) || count($parentProduct['children']) < 2) {
+				throw new \Exception(
+					sprintf(
+						esc_html__( 'Error. Parent product with id %s has no children.', 'predic-wc-photography' ),
+						$parentProductId
+					),
+					500
+				);
+			}
+
+			/**
+			 * Set download files for all children here
+			 *
+			 * // TODO: Move this to separate importer class
+			 */
+			$wcProductDownload = new \WC_Product_Download();
+
+			/**
+			 * @important Id must not be longer than 32 chars due to the WC bug https://github.com/woocommerce/woocommerce/issues/20412
+			 */
+			$wcProductDownload->set_id($parentProductId . '-download');
+			$wcProductDownload->set_name($productSlug . '-download');
+
+			$downloadableFilePathParentProductFolder = $downloadableFilesUploadDirPath . '/' . $parentProductId;
+			$downloadableFilePath = $downloadableFilePathParentProductFolder . '/' . $wcProductDownload->get_name() . '.' . $img->extension;
+
+			if (!file_exists($downloadableFilePathParentProductFolder)) {
+				mkdir($downloadableFilePathParentProductFolder, 0755, true);
+			}
+
+			$moved = copy($tmpUploadPath, $downloadableFilePath);
+
+			if (! $moved) {
+				throw new \Exception(
+					sprintf(
+						esc_html__( 'Error. Downloadable file not copied to destination %s.', 'predic-wc-photography' ),
+						$downloadableFilePath
+					),
+					500
+				);
+			}
+
+			$wcProductDownload->set_file($downloadableFilePath);
+
+			foreach ($parentProduct['children'] as $childId) {
+				$childProduct = wc_get_product($childId);
+				$childProduct->set_downloads([$wcProductDownload]);
+				$childProduct->save();
+				//TODO:  Maybe validate if save sucessfull
+			}
+
+			// Set feedback for all
+			$result[$fileArray['name']] = $parentProduct;
         }
 
 

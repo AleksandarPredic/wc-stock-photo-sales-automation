@@ -53,20 +53,23 @@ class WCImporter extends \WC_Product_Importer
 		$variationResult = $this->processData();
 
 		if ( is_wp_error( $variationResult ) ) {
+			$code = is_int($variationResult->get_error_code()) ? $variationResult->get_error_code() : null;
 			throw new \Exception(
 				sprintf(
-					esc_html__('Failed to import variation: %s. Parent Product ID: %d. Error: %s', 'predic-wc-photography'),
+					esc_html__('Failed to import variation: %s. Parent Product ID: %s. Error: %s', 'predic-wc-photography'),
 					$this->name,
 					$parentId,
 					$variationResult->get_error_message()
 				),
-				$variationResult->get_error_code()
+				$code
 			);
 		}
 
+		$parentImport['children'][] = $variationResult['id'];
+
 
 		// Create extended price variation
-		$this->data = $this->setVariationProductData($parentId, $this->prices[0], 'Extended');
+		$this->data = $this->setVariationProductData($parentId, $this->prices[1], 'Extended');
 		$variationResult = $this->processData();
 
 		if ( is_wp_error( $variationResult ) ) {
@@ -81,6 +84,23 @@ class WCImporter extends \WC_Product_Importer
 			);
 		}
 
+		$parentImport['children'][] = $variationResult['id'];
+
+		/**
+		 * array(3) {
+		["id"]=>
+		int(143)
+		["updated"]=>
+		bool(true)
+		["children"]=>
+			array(2) {
+			[0]=>
+			int(144)
+			[1]=>
+			int(145)
+			}
+		}
+		 */
 		return $parentImport;
     }
 
@@ -95,16 +115,16 @@ class WCImporter extends \WC_Product_Importer
 	 * @param       $shortDescription
 	 * @param       $description
 	 * @param array $prices
-	 * @param       $imgaeId
+	 * @param       $imageId
 	 */
-	public function setData($name, $sku, $shortDescription, $description, $prices, $imgaeId )
+	public function setData($name, $sku, $shortDescription, $description, $prices, $imageId )
 	{
 		$this->name = sanitize_text_field($name);
 		$this->sku = sanitize_file_name($sku);
 		$this->shortDescription = sanitize_text_field($shortDescription);
 		$this->description = sanitize_text_field($description);
 		$this->prices = array_map('sanitize_text_field', $prices);
-		$this->imageId = intval($imgaeId);
+		$this->imageId = intval($imageId);
 
 		$this->data = $this->setVariableProductData();
 
@@ -141,7 +161,7 @@ class WCImporter extends \WC_Product_Importer
 				// Attributes will be automatically created if doesn't exists
 				'raw_attributes' => $this->setVariableProductAttributes(
 					[
-						'Licence' => ['Extended', 'Regular']
+						'Licence' => ['Regular', 'Extended']
 					]
 				), /* XSS WP standards ok */
 			)
