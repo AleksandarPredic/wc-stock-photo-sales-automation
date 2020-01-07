@@ -2,66 +2,67 @@
 
 namespace PredicWCPhoto\Controllers;
 
+use Intervention\Image\ImageManagerStatic as Image;
 use PredicWCPhoto\Contracts\ImporterInterface;
 
 class ImporterController
 {
 
-	/**
-	 * @var string
-	 */
-	private $pluginSlug;
+    /**
+     * @var string
+     */
+    private $pluginSlug;
 
-	/**
-	 * @var string
-	 */
-	private $formAction;
+    /**
+     * @var string
+     */
+    private $formAction;
 
-	/**
-	 * @var string
-	 */
-	private $formNonceName;
+    /**
+     * @var string
+     */
+    private $formNonceName;
 
-	/**
-	 * @var ImporterInterface
-	 */
-	private $importer;
+    /**
+     * @var ImporterInterface
+     */
+    private $importer;
 
-	/**
-	 * ImporterController constructor.
-	 *
-	 * @param ImporterInterface $importer
-	 */
-	public function __construct(ImporterInterface $importer)
-	{
-		$this->pluginSlug = predic_wc_photography_helpers()->config->getPluginSlug();
-		$this->formAction = str_replace('-', '_', sprintf('%s_import_form_action', $this->pluginSlug));
-		$this->formNonceName = str_replace('-', '_', sprintf('%s_import_form_nonce_name', $this->pluginSlug));
+    /**
+     * ImporterController constructor.
+     *
+     * @param ImporterInterface $importer
+     */
+    public function __construct(ImporterInterface $importer)
+    {
+        $this->pluginSlug    = predic_wc_photography_helpers()->config->getPluginSlug();
+        $this->formAction    = str_replace('-', '_', sprintf('%s_import_form_action', $this->pluginSlug));
+        $this->formNonceName = str_replace('-', '_', sprintf('%s_import_form_nonce_name', $this->pluginSlug));
 
-		$this->load();
-		$this->importer = $importer;
-	}
+        $this->load();
+        $this->importer = $importer;
+    }
 
-	public function load()
-	{
-		add_action(
-			str_replace('-', '_', sprintf('%s_page_import', $this->pluginSlug)),
-			[$this, 'form']
-		);
+    public function load()
+    {
+        add_action(
+            str_replace('-', '_', sprintf('%s_page_import', $this->pluginSlug)),
+            [$this, 'form']
+        );
 
-		add_action(
-			sprintf(
-				'admin_post_%s',
-				$this->formAction
-			),
-			[$this, 'import']
-		);
-	}
+        add_action(
+            sprintf(
+                'admin_post_%s',
+                $this->formAction
+            ),
+            [$this, 'import']
+        );
+    }
 
-	public function form() {
-
-		printf(
-			'<h1>%3$s</h1>
+    public function form()
+    {
+        printf(
+            '<h1>%3$s</h1>
 			<form method="post" action="%6$s" enctype="multipart/form-data">
 				<input type="hidden" name="action" value="%4$s"/>
 				%5$s
@@ -78,27 +79,54 @@ class ImporterController
 					</tbody>
 				</table>
 			</form>',
-			esc_html__('Select photos', 'predic-wc-photography'),
-			esc_html__('Import', 'predic-wc-photography'),
-			esc_html__('Import photos and convert them to products', 'predic-wc-photography'),
-			$this->formAction,
-			wp_nonce_field(
-				$this->formAction,
-				$this->formNonceName,
-				true,
-				false
-			),
-			esc_url(admin_url('admin-post.php'))
-		);
+            esc_html__('Select photos', 'predic-wc-photography'),
+            esc_html__('Import', 'predic-wc-photography'),
+            esc_html__('Import photos and convert them to products', 'predic-wc-photography'),
+            $this->formAction,
+            wp_nonce_field(
+                $this->formAction,
+                $this->formNonceName,
+                true,
+                false
+            ),
+            esc_url(admin_url('admin-post.php'))
+        );
+    }
 
-	}
+    public function import()
+    {
+        var_dump($_POST);
+        var_dump($_FILES);
 
-	public function import()
-	{
-		var_dump($_POST);
-		var_dump($_FILES);
-		die();
+        // TODO: Nonce check
 
-		$this->importer->import($photos);
-	}
+        if (! isset($_FILES['files']['name']) || empty($_FILES['files']['name'])) {
+        	throw new \Exception(
+				esc_html__('No files selected!', 'predic-wc-photography'),
+				400
+			);
+		}
+
+        foreach ($_FILES['files']['type'] as $type) {
+        	if ('image/jpeg' !== $type) {
+				throw new \Exception(
+					esc_html__('Only jpeg image types are supported!', 'predic-wc-photography'),
+					400
+				);
+			}
+		}
+
+		$photos = [];
+		for ($i = 0; $i < count($_FILES['files']['name']); $i++) {
+
+			$photos[] = [
+				'filename' => strtolower(sanitize_file_name($_FILES['files']['name'][$i])),
+				'tmp_name' => $_FILES['files']['tmp_name'][$i]
+			];
+
+		}
+
+		// Add try cache
+        $this->importer->import($photos);
+    }
 }

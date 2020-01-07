@@ -176,4 +176,14 @@ class Config
     {
         return $this->distributionUri;
     }
+
+    /**
+     * Return plugin images folder path
+	 *
+     * @return string
+     */
+    public function getPluginImagesPath()
+    {
+        return $this->getPluginDirPath() . 'assets/images';
+    }
 }
