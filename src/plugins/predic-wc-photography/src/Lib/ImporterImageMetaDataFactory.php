@@ -11,14 +11,13 @@ use PredicWCPhoto\Contracts\ImporterImageMetaDataParserInterface;
  */
 class ImporterImageMetaDataFactory
 {
-
     /**
      * Return new metadata parser instance
-     * @param string $imagePath Path to an image file
+	 *
      * @return ImporterImageMetaDataParserInterface
      */
-    public static function make($imagePath)
+    public static function make()
     {
-        return new ImporterImageMetaDataParser($imagePath);
+        return new ImporterImageMetaDataParser();
     }
 }

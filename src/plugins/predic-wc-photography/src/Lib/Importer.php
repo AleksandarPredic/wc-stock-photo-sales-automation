@@ -4,28 +4,13 @@ namespace PredicWCPhoto\Lib;
 
 use Intervention\Image\ImageManagerStatic as Image;
 use PredicWCPhoto\Contracts\ImporterInterface;
-use Spatie\ImageOptimizer\OptimizerChainFactory as ImageOptimizer;
 
 class Importer implements ImporterInterface
 {
-    const IMAGE_MAX_WIDTH = 1920;
-    const IMAGE_QUALITY   = 80;
-    // TODO: Do all of this next
-
     /**
      * @var string
      */
-    private $watermarkImagePath;
-
-    /**
-     * @var string
-     */
-    private $pluginSlug;
-
-    /**
-     * @var string
-     */
-    private $downloadableFilesUploadDirPath = 'pwcp-woocommerce-downloadable-files';
+    private $downloadableFilesUploadDirPath = 'pwcp-wc-downloadable-files';
 
     /**
      * Add two new taxonomies for model and shootout
@@ -34,13 +19,12 @@ class Importer implements ImporterInterface
      * Make delete product button to delete linked images and zip files. Check if product delete zip files when deleted or hOOK TO PRODUCT DELETE
      * Javi djoletu da na nekim slikama nema podesen model aparata u metadata
      * Da se prikaze neki opis ispod stranice kategorije i da moze djole da tu upisuje html
+	 *
+	 * Create helper for creating directories
      */
 
     public function __construct()
     {
-        $config                   = predic_wc_photography_helpers()->config;
-        $this->watermarkImagePath = $config->getPluginImagesPath() . '/importer/watermark.png';
-        $this->pluginSlug         = $config->getPluginSlug();
     }
 
     /**
@@ -59,15 +43,20 @@ class Importer implements ImporterInterface
 
         // Set temporary folder to manipulate images
         $uploadDir                      = wp_upload_dir();
-        $tmpUploadDirPath               = $uploadDir['basedir'] . '/' . sanitize_file_name($this->pluginSlug) . '-tmp';
         $downloadableFilesUploadDirPath = $uploadDir['basedir'] . '/' . sanitize_file_name($this->downloadableFilesUploadDirPath);
 
-        if (!file_exists($tmpUploadDirPath)) {
-            mkdir($tmpUploadDirPath, 0755, true);
-        }
-
         if (!file_exists($downloadableFilesUploadDirPath)) {
-            mkdir($downloadableFilesUploadDirPath, 0755, true);
+			$bool = mkdir($downloadableFilesUploadDirPath, 0755, true);
+
+			if (! $bool) {
+				throw new \Exception(
+					sprintf(
+						esc_html__('Error. Could not create dir: %s.', 'predic-wc-photography'),
+						$this->tmpUploadDirPath
+					),
+					500
+				);
+			}
         }
 
         $importerTerms = ImporterTermFactory::make();
@@ -75,28 +64,27 @@ class Importer implements ImporterInterface
         foreach ($photos as $photo) {
             $filename            = str_replace('_', '-', strtolower(sanitize_file_name($photo['filename'])));
             $pathInfo            = pathinfo($filename);
-            $tmpUploadPath       = $photo['tmp_name'];
-            $tmpFilePath         = $tmpUploadDirPath . '/' . $filename;
-            $productSlug         = basename($filename, sprintf('.%s', $pathInfo['extension']));
+            $fileExtension = $pathInfo['extension'];
+            $tmpName             = $photo['tmp_name'];
+            $productSlug         = basename($filename, sprintf('.%s', $fileExtension));
             $wcProduct           = wc_get_product(wc_get_product_id_by_sku($productSlug)); // Check if product exists
-            $wcProductImageId    = is_a($wcProduct, '\WC_Product') ? $wcProduct->get_image_id() : false;
 
             /**
              * Set vars from image metadata
              */
-			$metaDataParser = ImporterImageMetaDataFactory::make($tmpUploadPath);
-			$metaDataParser->parse();
-            $camera          = $metaDataParser->getCamera();
-            $resolution      = $metaDataParser->getResolution();
-            $type     = $metaDataParser->getType();
+            $metaDataParser = ImporterImageMetaDataFactory::make();
+            $metaDataParser->parse($tmpName);
+            $camera               = $metaDataParser->getCamera();
+            $resolution           = $metaDataParser->getResolution();
+            $type                 = $metaDataParser->getType();
             $productName          = ! empty($metaDataParser->getName()) ? $metaDataParser->getName() : ucfirst(str_replace('-', ' ', $productSlug));
             $description          = $metaDataParser->getDescription();
             $cameraUploadDate     = $metaDataParser->getCameraUploadDate();
-            $terms      = $metaDataParser->getKeywords();
+            $terms                = $metaDataParser->getKeywords();
 
-			/**
-			 * Parse tags ids form keywords
-			 */
+            /**
+             * Parse tags ids form keywords
+             */
             $productTagsIds = [];
             if (!empty($terms)) {
                 foreach ($terms as $term) {
@@ -111,72 +99,13 @@ class Importer implements ImporterInterface
             /**
              * Handle image manipulation
              */
-            // Delete image attached and re upload new so we can update new metadata
-            if (! empty($wcProductImageId)) {
-                $bool = false !== wp_delete_post($wcProductImageId, true);
-
-                if (! $bool) {
-                    throw new \Exception(
-                        sprintf(
-                            esc_html__('Error deleting product image with id %s.', 'predic-wc-photography'),
-                            $this->product->get_id()
-                        ),
-                        500
-                    );
-                }
-            }
-
-            // Delete previous created file if doing this second time and file exists
-            if (file_exists($tmpFilePath)) {
-                unlink($tmpFilePath);
-            }
-
-            // open an image file
-            /**
-             * https://packagist.org/packages/intervention/image
-             */
-            $img = Image::make($tmpUploadPath);
-
-            /**
-             * Process image before product
-             */
-
-            // Resize
-            $img = $this->resizeImg($img);
-
-            // insert a watermark - Other position: bottom-left
-            $img->insert(Image::make($this->watermarkImagePath), 'center');
-
-            // save image in desired format
-            $img->save($tmpFilePath, self::IMAGE_QUALITY);
-
-            // Optimize images
-            /**
-             * TODO: Make sure server has installed or nothing will happen
-             *
-             * apt-get install jpegoptim
-             *
-             * https://packagist.org/packages/spatie/image-optimizer
-             */
-            $optimizerChain = ImageOptimizer::create();
-            $optimizerChain->optimize($tmpFilePath);
-
-            $fileArray = [
-                'name'     => $filename,
-                'tmp_name' => $tmpFilePath,
-            ];
-
-            // https://wordpress.stackexchange.com/questions/70573/checking-if-a-file-is-already-in-the-media-library
-            $imgaeId = media_handle_sideload(
-                $fileArray,
-                null,
-                $description
+            $imagesImporter = ImporterImagesFactory::make();
+            $imageId        = $imagesImporter->import(
+                $filename,
+                $tmpName,
+                $description,
+                $wcProduct
             );
-
-            // Delete tmp file, if media_handle_sideload didn't deleted it
-            if (file_exists($tmpFilePath)) {
-                unlink($tmpFilePath);
-            }
 
             /**
              * Create products first before any image manipulation
@@ -191,7 +120,7 @@ class Importer implements ImporterInterface
                     99, // Regular price
                     999 // Extended price
                 ],
-                $imgaeId,
+                $imageId,
                 $productTagsIds,
                 [
                     [
@@ -241,13 +170,13 @@ class Importer implements ImporterInterface
             $wcProductDownload->set_name($productSlug . '-download');
 
             $downloadableFilePathParentProductFolder = $downloadableFilesUploadDirPath . '/' . $parentProductId;
-            $downloadableFilePath                    = $downloadableFilePathParentProductFolder . '/' . $wcProductDownload->get_name() . '.' . $img->extension;
+            $downloadableFilePath                    = $downloadableFilePathParentProductFolder . '/' . $wcProductDownload->get_name() . '.' . $fileExtension;
 
             if (!file_exists($downloadableFilePathParentProductFolder)) {
                 mkdir($downloadableFilePathParentProductFolder, 0755, true);
             }
 
-            $moved = copy($tmpUploadPath, $downloadableFilePath);
+            $moved = copy($tmpName, $downloadableFilePath);
 
             if (! $moved) {
                 throw new \Exception(
@@ -269,41 +198,10 @@ class Importer implements ImporterInterface
             }
 
             // Set feedback for all
-            $result[$fileArray['name']] = $parentProduct;
+            $result[$productSlug] = $parentProduct;
         }
 
         var_dump($result);
         die();
-    }
-
-    /**
-     * @param \Intervention\Image\Image $img
-     * @return \Intervention\Image\Image
-     */
-    private function resizeImg(\Intervention\Image\Image $img)
-    {
-        $width    = $img->getWidth();
-        $height   = $img->getHeight();
-        $maxWidth = self::IMAGE_MAX_WIDTH;
-
-        if ($width >=  $height) {
-            if ($img->getWidth() < $maxWidth) {
-                return $img;
-            }
-
-            $img->resize($maxWidth, null, function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            });
-
-            return $img;
-        }
-
-        $img->resize(null, $maxWidth, function ($constraint) {
-            $constraint->aspectRatio();
-            $constraint->upsize();
-        });
-
-        return $img;
     }
 }

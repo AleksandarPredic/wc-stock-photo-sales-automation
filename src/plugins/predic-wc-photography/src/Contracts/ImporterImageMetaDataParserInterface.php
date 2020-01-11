@@ -11,8 +11,10 @@ interface ImporterImageMetaDataParserInterface
 {
     /**
      * Parse metadata from an image
+     *
+     * @param string $imagePath Path to the image
      */
-    public function parse();
+    public function parse($imagePath);
 
     /**
      * Return camera model name

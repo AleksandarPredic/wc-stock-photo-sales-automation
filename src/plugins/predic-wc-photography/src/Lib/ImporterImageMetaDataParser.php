@@ -11,25 +11,22 @@ use PredicWCPhoto\Contracts\ImporterImageMetaDataParserInterface;
  */
 class ImporterImageMetaDataParser extends ImporterImageMetaDataParserSchema implements ImporterImageMetaDataParserInterface
 {
-
     /**
      * Path to an image file
      * @var string
      */
     private $imagePath;
 
-    public function __construct($imagePath)
-    {
-        $this->imagePath = $imagePath;
-    }
-
     /**
      * Parse metadata from an image
+     *
+     * @param string $imagePath Path to the image
      */
-    public function parse()
+    public function parse($imagePath)
     {
         // TODO: handle metadata reading i upisati sta je sta u gdoc dokument i odakle se vadi
 
+        $this->imagePath = $imagePath;
         $this->setExifData();
         $this->setIptcData();
     }
