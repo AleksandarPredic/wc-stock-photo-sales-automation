@@ -33,6 +33,11 @@ class WCImporter extends \WC_Product_Importer
     private $metadata;
 
     /**
+     * @var array
+     */
+    private $tagsIds;
+
+    /**
      * @inheritDoc
      */
     public function import()
@@ -121,9 +126,10 @@ class WCImporter extends \WC_Product_Importer
      * @param string $description      From image metadata
      * @param array  $prices           array of prices [regular, extended]
      * @param int    $imageId          Featured image id
+     * @param array  $tagsIds
      * @param array  $metadata         array of metadata [['key' => post_meta_key, 'value' => some value]]
      */
-    public function setData($name, $sku, $shortDescription, $description, $prices, $imageId, $metadata)
+    public function setData($name, $sku, $shortDescription, $description, $prices, $imageId, $tagsIds, $metadata)
     {
         $this->name             = sanitize_text_field($name);
         $this->sku              = sanitize_file_name($sku);
@@ -131,7 +137,8 @@ class WCImporter extends \WC_Product_Importer
         $this->description      = sanitize_text_field($description);
         $this->prices           = array_map('sanitize_text_field', $prices);
         $this->imageId          = intval($imageId);
-        $this->metadata         = $metadata;
+        $this->tagsIds          = array_map('sanitize_text_field', $tagsIds);
+        $this->metadata         = map_deep($metadata, 'sanitize_text_field');
 
         $this->data = $this->setVariableProductData();
     }
@@ -163,6 +170,7 @@ class WCImporter extends \WC_Product_Importer
                 'regular_price'  => '',
                 'manage_stock'   => false,
                 'stock_quantity' => null,
+                'tag_ids'        => $this->tagsIds,
                 'image_id'       => $this->imageId,
                 'meta_data'      => $this->metadata,
                 // Attributes will be automatically created if doesn't exists

@@ -2,6 +2,11 @@
 
 namespace PredicWCPhoto\Contracts;
 
+/**
+ * Interface ImporterInterface
+ *
+ * @package PredicWCPhoto\Contracts
+ */
 interface ImporterInterface
 {
 

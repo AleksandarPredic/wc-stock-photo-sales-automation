@@ -25,19 +25,15 @@ class Importer implements ImporterInterface
     /**
      * @var string
      */
-    private $downloadableFilesUploadDirPath = 'woocommerce-downloadable-files';
+    private $downloadableFilesUploadDirPath = 'pwcp-woocommerce-downloadable-files';
 
     /**
-     * @var \WC_Importer_Interface
-     */
-    private $wcImporter;
-
-    /**
-     * Add tags as terms and than set them to product
-	 * Add two new taxonomies for model and shootout
-     * Parse metadata and add tags and categories - vidi ispod sta je jos ostalo
+     * Add two new taxonomies for model and shootout
+     * Parse metadata - vidi ispod sta je jos ostalo
      * Odakle ce da se upisuje price za regular i extended
      * Make delete product button to delete linked images and zip files. Check if product delete zip files when deleted or hOOK TO PRODUCT DELETE
+     * Javi djoletu da na nekim slikama nema podesen model aparata u metadata
+     * Da se prikaze neki opis ispod stranice kategorije i da moze djole da tu upisuje html
      */
 
     public function __construct()
@@ -52,6 +48,13 @@ class Importer implements ImporterInterface
      */
     public function import($photos)
     {
+        if (count($photos) > 10) {
+            throw new \Exception(
+                esc_html__('Maximum photos to process is 10. Please reload the page and select up to 10 photos.', 'predic-wc-photography'),
+                403
+            );
+        }
+
         $result = [];
 
         // Set temporary folder to manipulate images
@@ -67,9 +70,9 @@ class Importer implements ImporterInterface
             mkdir($downloadableFilesUploadDirPath, 0755, true);
         }
 
-        foreach ($photos as $photo) {
-            $wcImporter = new WCImporter();
+        $importerTerms = ImporterTermFactory::make();
 
+        foreach ($photos as $photo) {
             $filename            = str_replace('_', '-', strtolower(sanitize_file_name($photo['filename'])));
             $pathInfo            = pathinfo($filename);
             $tmpUploadPath       = $photo['tmp_name'];
@@ -81,38 +84,33 @@ class Importer implements ImporterInterface
             /**
              * Set vars from image metadata
              */
-            // Read metadata
-            // TODO: handle metadata reading
-            $metaData = exif_read_data($tmpUploadPath);
-            // ImageDescription - Description
-            // DateTimeOriginal - upload date
-            // Model - Camera tj aparat
-            // ImageWidth - ovde je vrednost 5511 tj sirina
-            // ImageLength - ovde je vrednost 3674 tj visina
-            // Artist - ovo je autor
+			$metaDataParser = ImporterImageMetaDataFactory::make($tmpUploadPath);
+			$metaDataParser->parse();
+            $camera          = $metaDataParser->getCamera();
+            $resolution      = $metaDataParser->getResolution();
+            $type     = $metaDataParser->getType();
+            $productName          = ! empty($metaDataParser->getName()) ? $metaDataParser->getName() : ucfirst(str_replace('-', ' ', $productSlug));
+            $description          = $metaDataParser->getDescription();
+            $cameraUploadDate     = $metaDataParser->getCameraUploadDate();
+            $terms      = $metaDataParser->getKeywords();
 
-            $size = getimagesize($tmpUploadPath, $info);
-            if (is_array($info) && isset($info["APP13"])) {
-                $iptc = iptcparse($info["APP13"]);
-                var_dump($iptc);
+			/**
+			 * Parse tags ids form keywords
+			 */
+            $productTagsIds = [];
+            if (!empty($terms)) {
+                foreach ($terms as $term) {
+                    try {
+                        $productTagsIds[] = $importerTerms->import($term, 'product_tag');
+                    } catch (\Exception $e) {
+                        // TODO: Add logger so we don't interrupt import process as this is not crucial
+                    }
+                }
             }
-            // 2#025 - keywords
-
-            // Dodatno
-            // Sifra proizvoda - ovo je filename
-            // More from this shoot - custom taxonomy / jos treba odrediti odakle ce da se cita
-            // More from this model - custom taxonomy  / jos treba odrediti odakle ce da se cita
-
-            // Nejasno
-            // Price gde ce da se upisuje ili cemo to iz nekih podesavanja da radimo
-
-            $description = isset($metaData['ImageDescription']) ? $metaData['ImageDescription'] : '';
-            $camera      = isset($metaData['Model']) ? $metaData['Model'] : '';
 
             /**
              * Handle image manipulation
              */
-
             // Delete image attached and re upload new so we can update new metadata
             if (! empty($wcProductImageId)) {
                 $bool = false !== wp_delete_post($wcProductImageId, true);
@@ -146,8 +144,8 @@ class Importer implements ImporterInterface
             // Resize
             $img = $this->resizeImg($img);
 
-            // insert a watermark
-            $img->insert(Image::make($this->watermarkImagePath), 'bottom-left');
+            // insert a watermark - Other position: bottom-left
+            $img->insert(Image::make($this->watermarkImagePath), 'center');
 
             // save image in desired format
             $img->save($tmpFilePath, self::IMAGE_QUALITY);
@@ -183,8 +181,9 @@ class Importer implements ImporterInterface
             /**
              * Create products first before any image manipulation
              */
+            $wcImporter = new WCImporter();
             $wcImporter->setData(
-                ucfirst(str_replace('-', ' ', $productSlug)),
+                $productName,
                 $productSlug,
                 '',
                 $description,
@@ -193,11 +192,24 @@ class Importer implements ImporterInterface
                     999 // Extended price
                 ],
                 $imgaeId,
+                $productTagsIds,
                 [
                     [
                         'key'   => 'camera',
                         'value' => sanitize_text_field($camera)
-                    ]
+                    ],
+                    [
+                        'key'   => 'resolution',
+                        'value' => implode('x', array_map('sanitize_text_field', $resolution)) . 'px'
+                    ],
+                    [
+                        'key'   => 'type',
+                        'value' => sanitize_text_field($type)
+                    ],
+                    [
+                        'key'   => 'camera_upload_date',
+                        'value' => sanitize_text_field($cameraUploadDate)
+                    ],
                 ]
             );
 

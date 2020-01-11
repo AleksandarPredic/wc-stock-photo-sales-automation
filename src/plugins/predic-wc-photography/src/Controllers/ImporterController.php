@@ -2,7 +2,6 @@
 
 namespace PredicWCPhoto\Controllers;
 
-use Intervention\Image\ImageManagerStatic as Image;
 use PredicWCPhoto\Contracts\ImporterInterface;
 
 class ImporterController
@@ -100,36 +99,34 @@ class ImporterController
 
         // TODO: Nonce check
 
-		// TODO: make ajax method to call this for each uploaded image as we can't handle more than 10 images - safe way
-		// and to avoid this Warning: Maximum number of allowable file uploads has been exceeded in Unknown on line 0
+        // TODO: make ajax method to call this for each uploaded image as we can't handle more than 10 images - safe way
+        // and to avoid this Warning: Maximum number of allowable file uploads has been exceeded in Unknown on line 0
 
         if (! isset($_FILES['files']['name']) || empty($_FILES['files']['name'])) {
-        	throw new \Exception(
-				esc_html__('No files selected!', 'predic-wc-photography'),
-				400
-			);
-		}
+            throw new \Exception(
+                esc_html__('No files selected!', 'predic-wc-photography'),
+                400
+            );
+        }
 
         foreach ($_FILES['files']['type'] as $type) {
-        	if ('image/jpeg' !== $type) {
-				throw new \Exception(
-					esc_html__('Only jpeg image types are supported!', 'predic-wc-photography'),
-					400
-				);
-			}
-		}
+            if ('image/jpeg' !== $type) {
+                throw new \Exception(
+                    esc_html__('Only jpeg image types are supported!', 'predic-wc-photography'),
+                    400
+                );
+            }
+        }
 
-		$photos = [];
-		for ($i = 0; $i < count($_FILES['files']['name']); $i++) {
+        $photos = [];
+        for ($i = 0; $i < count($_FILES['files']['name']); $i++) {
+            $photos[] = [
+                'filename' => $_FILES['files']['name'][$i],
+                'tmp_name' => $_FILES['files']['tmp_name'][$i]
+            ];
+        }
 
-			$photos[] = [
-				'filename' => $_FILES['files']['name'][$i],
-				'tmp_name' => $_FILES['files']['tmp_name'][$i]
-			];
-
-		}
-
-		// Add try cache
+        // Add try cache
         $this->importer->import($photos);
     }
 }
