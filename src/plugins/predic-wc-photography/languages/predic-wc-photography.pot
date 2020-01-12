@@ -5,17 +5,109 @@ msgid ""
 msgstr ""
 "Project-Id-Version: predic-wc-photography\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/tags/_s\n"
-"POT-Creation-Date: 2018-08-30 12:02+0200\n"
+"POT-Creation-Date: 2020-01-12 01:45+0100\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: Aleksandar Predic\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.2.4\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n;_x;esc_html__;esc_html_e;esc_html_x;"
 "esc_html_n\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SearchPath-0: .\n"
 
+#: src/Admin/AdminMenuPages.php:36
+msgid "Import photos to products"
+msgstr ""
+
+#: src/Admin/AdminMenuPages.php:37
+msgid "Import photos"
+msgstr ""
+
+#: src/Controllers/ImporterController.php:81
+msgid "Select photos"
+msgstr ""
+
+#: src/Controllers/ImporterController.php:82
+msgid "Import"
+msgstr ""
+
+#: src/Controllers/ImporterController.php:83
+msgid "Import photos and convert them to products"
+msgstr ""
+
+#: src/Controllers/ImporterController.php:107
+msgid "No files selected!"
+msgstr ""
+
+#: src/Controllers/ImporterController.php:115
+msgid "Only jpeg image types are supported!"
+msgstr ""
+
+#: src/Lib/Importer.php:26
+msgid ""
+"Maximum photos to process is 10. Please reload the page and select "
+"up to 10 photos."
+msgstr ""
+
+#: src/Lib/Importer.php:125
+#, php-format
+msgid "Error. Parent product with id %s has no children set."
+msgstr ""
+
+#: src/Lib/ImporterDownloadFiles.php:52
+#, php-format
+msgid "Error $variableProductArray incomplete. File: %s.%s"
+msgstr ""
+
+#: src/Lib/ImporterDownloadFiles.php:82
+#, php-format
+msgid "Error. Downloadable file not copied to destination %s."
+msgstr ""
+
+#: src/Lib/ImporterDownloadFiles.php:97
+#, php-format
+msgid ""
+"Error assigning downloadable file to children products. Variable "
+"product id: %s."
+msgstr ""
+
+#: src/Lib/ImporterImages.php:76
+#, php-format
+msgid "Error deleting product image with id %s."
+msgstr ""
+
+#: src/Lib/ImporterImages.php:144
+#, php-format
+msgid "Error importing image %s. Error: %s"
+msgstr ""
+
+#: src/Lib/ImporterTerm.php:84
+#, php-format
+msgid "Error importing term %1$s with slug %2$s. Error message: %3$s."
+msgstr ""
+
+#: src/Lib/WCImporter.php:104
+#, php-format
+msgid "Failed to convert image: %s to product. Error: %s"
+msgstr ""
+
+#: src/Lib/WCImporter.php:125
+#, php-format
+msgid ""
+"Failed to import variation: %s. Parent Product ID: %s. Error: %s"
+msgstr ""
+
+#: src/Lib/WCImporter.php:145
+#, php-format
+msgid ""
+"Failed to import variation: %s. Parent Product ID: %d. Error: %s"
+msgstr ""
+
+#: src/Traits/FilesTrait.php:28
+#, php-format
+msgid "Error. Could not create dir: %s."
+msgstr ""

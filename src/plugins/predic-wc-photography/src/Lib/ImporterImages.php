@@ -19,12 +19,12 @@ class ImporterImages implements ImporterImagesInterface
     /**
      * Width to resize image if larger
      */
-    const IMAGE_MAX_WIDTH = 1920;
+    private const IMAGE_MAX_WIDTH = 1920;
 
     /**
      * Image quality for previews
      */
-    const IMAGE_QUALITY   = 80;
+    private const IMAGE_QUALITY   = 80;
 
     /**
      * @var string
@@ -96,17 +96,17 @@ class ImporterImages implements ImporterImagesInterface
          */
         $img = $this->resizeImg($img);
 
-		/**
-		 * Insert a watermark - Other position: bottom-left
-		 */
+        /**
+         * Insert a watermark - Other position: bottom-left
+         */
         $img->insert(Image::make($this->watermarkImagePath), 'center');
 
         // save image in desired format
         $img->save($tmpFilePath, self::IMAGE_QUALITY);
 
         /**
-		 * Optimize image
-		 *
+         * Optimize image
+         *
          * @important: Make sure server has installed or nothing will happen
          *
          * apt-get install jpegoptim
@@ -121,9 +121,9 @@ class ImporterImages implements ImporterImagesInterface
             'tmp_name' => $tmpFilePath,
         ];
 
-		/**
-		 * Import image
-		 */
+        /**
+         * Import image
+         */
         $imageId = media_handle_sideload(
             $fileArray,
             null,

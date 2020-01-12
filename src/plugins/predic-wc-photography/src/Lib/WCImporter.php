@@ -9,6 +9,11 @@ if (! class_exists('WC_Product_Importer', false)) {
     include_once WC_ABSPATH . '/includes/import/abstract-wc-product-importer.php';
 }
 
+/**
+ * Class WCImporter
+ *
+ * @package PredicWCPhoto\Lib
+ */
 class WCImporter extends \WC_Product_Importer
 {
 
@@ -17,28 +22,77 @@ class WCImporter extends \WC_Product_Importer
      */
     private $data;
 
-    private $name;
-    private $sku;
-    private $shortDescription;
-    private $description;
-    private $prices;
     /**
+     * Product name
+     * @var string
+     */
+    private $name;
+
+    /**
+     * Product sku
+     * @var string
+     */
+    private $sku;
+
+    /**
+     * Product short description
+     * @var string
+     */
+    private $shortDescription;
+
+    /**
+     * Product description
+     * @var string
+     */
+    private $description;
+
+    /**
+     * Array of product prices [regular, extended]
+     * @var array
+     */
+    private $prices;
+
+    /**
+     * Product image id
      * @var int
      */
     private $imageId;
 
     /**
+     * Array of metadata [['key' => post_meta_key, 'value' => some value]...]
      * @var array
      */
     private $metadata;
 
     /**
+     * Array of tag ids, non associative array
      * @var array
      */
     private $tagsIds;
 
     /**
-     * @inheritDoc
+     * Product custom global attribute taxonomy
+     * @var string
+     */
+    private $licenceAttribute = 'Licence';
+
+    /**
+     * Product custom global attribute taxonomy term
+     * @var string
+     */
+    private $licenceAttributeRegularTerm = 'Regular';
+
+    /**
+     * Product custom global attribute taxonomy term
+     * @var string
+     */
+    private $licenceAttributeExtendedTerm = 'Extended';
+
+    /**
+     * Process set data
+     *
+     * @throws \Exception
+     * @return array Return array of results for each photo [ ['id' => int, 'updated' => bool, 'children' => [int, int]] ... ]
      */
     public function import()
     {
@@ -57,9 +111,10 @@ class WCImporter extends \WC_Product_Importer
 
         $parentId = $parentImport['id'];
 
-        // Create regular price variation
-        // TODO: Set licence values on one place
-        $this->data      = $this->setVariationProductData($parentId, $this->prices[0], 'Regular');
+        /**
+         * Create regular price variation
+         */
+        $this->data      = $this->setVariationProductData($parentId, $this->prices[0], $this->licenceAttributeRegularTerm);
         $variationResult = $this->processData();
 
         if (is_wp_error($variationResult)) {
@@ -78,8 +133,10 @@ class WCImporter extends \WC_Product_Importer
 
         $parentImport['children'][] = $variationResult['id'];
 
-        // Create extended price variation
-        $this->data      = $this->setVariationProductData($parentId, $this->prices[1], 'Extended');
+		/**
+		 * Create extended price variation
+		 */
+        $this->data      = $this->setVariationProductData($parentId, $this->prices[1], $this->licenceAttributeExtendedTerm);
         $variationResult = $this->processData();
 
         if (is_wp_error($variationResult)) {
@@ -96,24 +153,14 @@ class WCImporter extends \WC_Product_Importer
 
         $parentImport['children'][] = $variationResult['id'];
 
-        /**
-         * array(3) {
-         * ["id"]=>
-         * int(143)
-         * ["updated"]=>
-         * bool(true)
-         * ["children"]=>
-         * array(2) {
-         * [0]=>
-         * int(144)
-         * [1]=>
-         * int(145)
-         * }
-         * }
-         */
         return $parentImport;
     }
 
+	/**
+	 * Process data - import data into DB
+	 * @return array|\WP_Error
+	 * @throws \Exception
+	 */
     public function processData()
     {
         return $this->process_item($this->data);
@@ -126,8 +173,8 @@ class WCImporter extends \WC_Product_Importer
      * @param string $description      From image metadata
      * @param array  $prices           array of prices [regular, extended]
      * @param int    $imageId          Featured image id
-     * @param array  $tagsIds
-     * @param array  $metadata         array of metadata [['key' => post_meta_key, 'value' => some value]]
+     * @param array  $tagsIds		   Array of tag ids, non associative array
+     * @param array  $metadata         Array of metadata [['key' => post_meta_key, 'value' => some value]...]
      */
     public function setData($name, $sku, $shortDescription, $description, $prices, $imageId, $tagsIds, $metadata)
     {
@@ -143,6 +190,10 @@ class WCImporter extends \WC_Product_Importer
         $this->data = $this->setVariableProductData();
     }
 
+	/**
+	 * Set data common for Variation and Variable products
+	 * @return array
+	 */
     private function setCommonProductData()
     {
         return [
@@ -158,6 +209,10 @@ class WCImporter extends \WC_Product_Importer
         ];
     }
 
+	/**
+	 * Set data valid only for Variable product
+	 * @return array
+	 */
     private function setVariableProductData()
     {
         return array_merge(
@@ -173,16 +228,24 @@ class WCImporter extends \WC_Product_Importer
                 'tag_ids'        => $this->tagsIds,
                 'image_id'       => $this->imageId,
                 'meta_data'      => $this->metadata,
-                // Attributes will be automatically created if doesn't exists
-                'raw_attributes' => $this->setVariableProductAttributes(
+                // Attributes will be automatically created if it doesn't exists
+                'default_attributes' => [$this->licenceAttributeRegularTerm],
+                'raw_attributes'     => $this->setVariableProductAttributes(
                     [
-                        'Licence' => ['Regular', 'Extended']
+                        $this->licenceAttribute => [
+                            $this->licenceAttributeRegularTerm,
+                            $this->licenceAttributeExtendedTerm
+                        ]
                     ]
                 ), // XSS WP standards ok
             ]
         );
     }
 
+	/**
+	 * Set data valid only for Variation product
+	 * @return array
+	 */
     private function setVariationProductData($parentId, $price, $licence)
     {
         return array_merge(
@@ -207,6 +270,12 @@ class WCImporter extends \WC_Product_Importer
         );
     }
 
+	/**
+	 * Set Variable product attributes
+	 *
+	 * @param array $data Array [taxonomy => [term, term] ...] or in other words [attribute => [value, value] ...]
+	 * @return array
+	 */
     private function setVariableProductAttributes($data = [])
     {
         $raw_attributes = [];

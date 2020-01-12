@@ -101,11 +101,6 @@ class ImporterImageMetaDataParser extends ImporterImageMetaDataParserSchema impl
     {
         $metaData = exif_read_data($this->imagePath);
 
-        // Model - Camera tj aparat - KORISTIM
-        // COMPUTED[Height] - ovde je vrednost 5511 tj sirina  - KORISTIM
-        // COMPUTED[Width] - ovde je vrednost 3674 tj visina - KORISTIM
-        // MimeType - ovo je tip fajla - KORISTIM
-
         $this->camera          = isset($metaData['Model']) ? $metaData['Model'] : '';
         $this->resolution      = isset($metaData['COMPUTED']['Width']) && isset($metaData['COMPUTED']['Height']) ?
             ['width' => sanitize_text_field($metaData['COMPUTED']['Width']), 'height' => sanitize_text_field($metaData['COMPUTED']['Height'])] :
@@ -120,13 +115,6 @@ class ImporterImageMetaDataParser extends ImporterImageMetaDataParserSchema impl
     {
         $size = getimagesize($this->imagePath, $info);
         $iptc = is_array($info) && isset($info["APP13"]) ? iptcparse($info["APP13"]) : [];
-
-        // TODO: More from this shoot i More from this model
-        // More from this shoot - custom taxonomy / jos treba odrediti odakle ce da se cita
-        // More from this model - custom taxonomy  / jos treba odrediti odakle ce da se cita
-
-        // 2#025 - keywords
-        // 2#005 - - ProductName tj ako je podeseno u metadata kao Document title u Description tabu
 
         $this->name                 = isset($iptc['2#005'][0]) ? $iptc['2#005'][0] : '';
         $this->description          = isset($iptc['2#120'][0]) ? $iptc['2#120'][0] : '';

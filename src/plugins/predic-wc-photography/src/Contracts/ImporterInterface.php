@@ -11,10 +11,9 @@ interface ImporterInterface
 {
 
     /**
-	 * Return parent product id
-	 * @param array $photos
-     * @return int
-	 * @throws \Exception
+     * Return parent product id
+     * @param array $photos
+     * @return array
      */
     public function import($photos);
 }

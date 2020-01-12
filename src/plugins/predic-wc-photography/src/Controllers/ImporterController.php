@@ -122,11 +122,13 @@ class ImporterController
         for ($i = 0; $i < count($_FILES['files']['name']); $i++) {
             $photos[] = [
                 'filename' => $_FILES['files']['name'][$i],
-                'tmp_name' => $_FILES['files']['tmp_name'][$i]
+                'path' => $_FILES['files']['tmp_name'][$i]
             ];
         }
 
-        // Add try cache
-        $this->importer->import($photos);
+        // TODO: Add try cache
+        $result = $this->importer->import($photos);
+        var_dump($result);
+        die();
     }
 }
