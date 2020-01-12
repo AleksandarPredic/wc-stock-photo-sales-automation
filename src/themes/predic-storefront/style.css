@@ -8,5 +8,186 @@
  * License: GNU General Public License v2 or later
  * License URI:  http://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: predic-storefront
+ * Template: storefront
  * Tags:
  */
+
+/* https://w3bits.com/css-masonry/ */
+
+/* The Masonry Container */
+#primary .products:not(.related), /* Avoid double .products class above products on related container */
+.wc-block-grid__products {
+	display: block !important;
+	column-gap: 1em;
+	max-width: 100%;
+	margin-bottom: 2em;
+}
+
+/* The Masonry Brick */
+#primary .products .product,
+.wc-block-grid__product {
+	display: inline-block;
+	width: 100% !important;
+
+	/* Overridden styles WooCommerce */
+	float: none !important;
+	padding: 0 !important;
+	border: none;
+	flex: none !important;
+	max-width: 100% !important;
+	clear: none; !important;
+}
+
+#primary .products .product {
+	margin: 0 0 1em 0 !important;
+}
+
+.wc-block-grid__product {
+	margin: 0 0 0.6em 0 !important;
+}
+
+#primary .products .product,
+#primary .products .product img,
+.wc-block-grid__product .wc-block-grid__product-link,
+.wc-block-grid__product .wc-block-grid__product-image,
+.wc-block-grid__product .wc-block-grid__product-image img {
+	display: block;
+	margin: 0;
+}
+
+/* Masonry on large screens */
+@media only screen and (min-width: 1024px) {
+	#primary .products:not(.related),
+	.wc-block-grid__products {
+		column-count: 4;
+	}
+}
+
+/* Masonry on medium-sized screens */
+@media only screen and (max-width: 1023px) and (min-width: 768px) {
+	#primary .products:not(.related),
+	.wc-block-grid__products {
+		column-count: 3;
+	}
+}
+
+/* Masonry on small screens */
+@media only screen and (max-width: 767px) {
+	#primary .products:not(.related),
+	.wc-block-grid__products {
+		column-count: 2;
+	}
+}
+
+
+/* Overrides theme */
+
+/* Make all pages full screen as we have no sidebar */
+#primary {
+	width: 100% !important;
+	margin: 0 !important;
+	float: none !important;
+}
+
+/* H2 bit margin top */
+p + h2, p + header h2, p + h3, p + h4, ul + h2, ul + header h2, ul + h3, ul + h4, ol + h2, ol + header h2, ol + h3, ol + h4, table + h2, table + header h2, table + h3, table + h4, blockquote + h2, blockquote + header h2, blockquote + h3, blockquote + h4, form + h2, form + header h2, form + h3, form + h4 {
+	margin-top: 1em;
+}
+
+/* Custom elements */
+
+/* Home menu after hero */
+.ps-home-content-menu {
+	display: flex;
+	flex-wrap: nowrap;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.ps-home-content-menu li:not(:first-child) {
+	margin-left: 2em;
+}
+
+/* Popular collections */
+.ps-home-popular-collections {
+	align-items: stretch;
+	height: auto;
+	max-height: 600px;
+	min-height: 400px;
+	overflow-y: hidden;
+	overflow-x: scroll;
+	flex-wrap: nowrap !important;
+}
+
+.ps-home-popular-collections .wp-block-column {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.ps-home-popular-collections .wp-block-column figure {
+	 margin: 0 !important;
+	 height: 100%;
+	 width: auto;
+	 position: relative;
+ }
+
+.ps-home-popular-collections .wp-block-column figure > a {
+	display: block;
+	height: inherit;
+}
+
+.ps-home-popular-collections .wp-block-column figure img {
+	max-width: none;
+	height: 100%;
+	width: 100%;
+	object-fit: cover;
+}
+
+.ps-home-popular-collections .wp-block-column figcaption {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	z-index: 2;
+	background-color: rgba(0, 0, 0, 0.5);
+	color: white !important;
+	font-size: 12px !important;
+	font-weight: bold !important;
+	font-style: normal !important;
+	text-transform: uppercase;
+	padding: 2em !important;
+
+}
+
+@media only screen and (max-width: 1023px) {
+	.ps-home-popular-collections .wp-block-column {
+		flex: none !important;
+		flex-basis: unset !important;
+	}
+}
+
+@media only screen and (max-width: 1022px) and (min-width: 801px) {
+	.ps-home-popular-collections .wp-block-column {
+		width: calc(100% / 3.6) !important; /* Leave 4th slide to be visible */
+	}
+}
+
+@media only screen and (max-width: 800px) { /* Need custom brakepoint as it breaks strange */
+	.ps-home-popular-collections .wp-block-column {
+		width: 200px !important;
+	}
+}
+
+/* WooShop slider */
+
+/* Hide long category descriptions */
+body.home .shindiri-woo-slider-shortcode-version-one .shindiri-woo-slide-categories + .shindiri-woo-slide-title,
+body.home .shindiri-woo-slider-shortcode-version-seven .shindiri-woo-slide-categories + .shindiri-woo-slide-title {
+	display: none !important;
+}
+
+body.home .shindiri-woo-slider-shortcode-version-seven .shindiri-woo-slide-categories span,
+body.home .shindiri-woo-slider-shortcode-version-seven .shindiri-woo-slide-categories {
+	font-size: 1.6em !important;
+}

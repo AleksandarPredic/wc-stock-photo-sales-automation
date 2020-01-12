@@ -20,5 +20,32 @@ define( 'PREDIC-STOREFRONT_VERSION', '0.0.1' );
 /**
  * Set autoloader
  */
-require_once get_parent_theme_file_path( 'src/PredicStorefront/Autoloader.php');
-\PredicStorefront\Autoloader::register();
+/*require_once get_parent_theme_file_path( 'src/PredicStorefront/Autoloader.php');
+\PredicStorefront\Autoloader::register();*/
+
+add_action('template_redirect', function () {
+
+	/* WC */
+	remove_action('woocommerce_shop_loop_item_title', 'woocommerce_template_loop_product_title', 10);
+	remove_action('woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_price', 10);
+	remove_action('woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10);
+
+	/* Storefront */
+	remove_all_actions( 'storefront_sidebar' );
+
+	/* Remove unneeded post classes */
+
+	// Make sure no one override this and add extra classes to .product
+	add_filter('woocommerce_get_product_class_include_taxonomies', function ($bool){
+		return false;
+	}, 1, 999);
+
+	add_filter('woocommerce_post_class', function ($classes, $product){
+		return array(
+			'product',
+			'post-' . $product->get_id()
+		);
+	}, 1, 999);
+});
+
+

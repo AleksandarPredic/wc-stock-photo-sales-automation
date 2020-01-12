@@ -22,6 +22,8 @@
  * Javi djoletu da na nekim slikama nema podesen model aparata u metadata
  * Da se prikaze neki opis ispod stranice kategorije i da moze djole da tu upisuje html
  * Implementiraj js upload odavde https://www.dropzonejs.com/#usage
+ * MOzda da probam da ubacim stilove moje teme u gutenberg da se bolje vidi kako ce sta da izgleda - za admin
+ * Ukloni posle popular collection na dnu sto ima linija
  */
 
 // Do not allow directly accessing this file.
