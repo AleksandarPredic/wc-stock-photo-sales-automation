@@ -1,0 +1,31 @@
+/*
+Normalizing styles have been helped along thanks to the fine work of
+Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
+*/
+/* --------------------------------------------------------------
+>>> TABLE OF CONTENTS:
+----------------------------------------------------------------
+
+# Content
+	## Comments
+  ## Widgets
+-------------------------------------------------------------- */
+/* --------------------------------------------------------------
+# Widgets
+-------------------------------------------------------------- */
+.widget {
+  /* Make sure select elements fit in widgets. */ }
+  .widget select {
+    max-width: 100%; }
+
+/* --------------------------------------------------------------
+# Content
+-------------------------------------------------------------- */
+/* --------------------------------------------------------------
+## Comments
+-------------------------------------------------------------- */
+.comment-content a {
+  word-wrap: break-word; }
+
+
+/*# sourceMappingURL=main.css.map*/
