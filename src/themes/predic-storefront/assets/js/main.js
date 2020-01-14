@@ -4,7 +4,7 @@
 
 	$( window ).load( function () {
 
-		console.log( 'ovde' );
+		// TODO: remove if not using
 
 	} );
 

@@ -15,13 +15,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit( 'Direct script access denied.' );
 }
 
-define( 'PREDIC-STOREFRONT_VERSION', '0.0.1' );
+define( 'PREDIC_STOREFRONT_VERSION', '0.0.1' );
+
+
 
 /**
  * Set autoloader
  */
-/*require_once get_parent_theme_file_path( 'src/PredicStorefront/Autoloader.php');
-\PredicStorefront\Autoloader::register();*/
+require 'vendor/autoload.php';
+
+/**
+ * Config
+ */
+\PredicStorefront\Config::getInstance()->init();
 
 add_action('template_redirect', function () {
 

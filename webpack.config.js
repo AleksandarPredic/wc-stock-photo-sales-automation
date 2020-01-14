@@ -3,8 +3,6 @@ const UglifyJsPlugin = require( 'uglifyjs-webpack-plugin' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 const OptimizeCSSAssetsPlugin = require( 'optimize-css-assets-webpack-plugin' );
 const StyleLintPlugin = require( 'stylelint-webpack-plugin' );
-const CleanWebpackPlugin = require( 'clean-webpack-plugin' );
-const CopyPlugin = require( 'copy-webpack-plugin' );
 const Autoprefixer = require( 'autoprefixer' );
 
 // Get mode - https://webpack.js.org/concepts/mode/
@@ -20,7 +18,7 @@ module.exports = ( env, argv ) => {
 			],
 		},
 		output: {
-			path: path.resolve( __dirname, './dist/themes/predic-storefront' ),
+			path: path.resolve( __dirname, './src/themes/predic-storefront/dist/' ),
 			filename: 'assets/js/[name].js',
 		},
 		module: {
@@ -68,7 +66,6 @@ module.exports = ( env, argv ) => {
 			],
 		},
 		plugins: [
-			new CleanWebpackPlugin(),
 			new StyleLintPlugin( {
 				files: './src/themes/predic-storefront/assets/scss/**/*.scss',
 				configFile: './.stylelintrc',
@@ -77,13 +74,6 @@ module.exports = ( env, argv ) => {
 				fallback: 'style-loader',
 				filename: 'assets/css/[name].css',
 			} ),
-			new CopyPlugin( [
-				{
-					from: 'src/',
-					to: '../../',
-					ignore: ['*.js', '*.scss', '*.png', '*.jpe?g', '*.JPE?G', '*.gif', '*.svg'],
-				},
-			] )
 		],
 		devtool: 'source-map',
 	};
