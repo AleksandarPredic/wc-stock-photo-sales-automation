@@ -27,5 +27,257 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 .comment-content a {
   word-wrap: break-word; }
 
+/* --------------------------------------------------------------
+# Parent theme overrides
+-------------------------------------------------------------- */
+/* --------------------------------------------------------------
+# Parent theme overrides
+-------------------------------------------------------------- */
+/* Make all pages full screen as we have no sidebar */
+#primary {
+  width: 100% !important;
+  margin: 0 !important;
+  float: none !important; }
+
+/* Many margins top */
+p + h2,
+p + header h2,
+p + h3,
+p + h4,
+ul + h2,
+ul + header h2,
+ul + h3,
+ul + h4,
+ol + h2,
+ol + header h2,
+ol + h3,
+ol + h4,
+table + h2,
+table + header h2,
+table + h3,
+table + h4,
+blockquote + h2,
+blockquote + header h2,
+blockquote + h3,
+blockquote + h4,
+form + h2,
+form + header h2,
+form + h3,
+form + h4 {
+  margin-top: 1em; }
+
+/* --------------------------------------------------------------
+# WooCommerce
+-------------------------------------------------------------- */
+/* --------------------------------------------------------------
+## Content product masonry
+-------------------------------------------------------------- */
+/* --------------------------------------------------------------
+# Masonry css only reference - https://w3bits.com/css-masonry/
+-------------------------------------------------------------- */
+/* The Masonry Container */
+#primary .products:not(.related),
+.wc-block-grid__products {
+  display: block !important;
+  -webkit-column-gap: 1em;
+     -moz-column-gap: 1em;
+          column-gap: 1em;
+  max-width: 100%;
+  margin-bottom: 2em;
+  /* The Masonry Brick */
+  /* Masonry on large screens */
+  /* Masonry on medium-sized screens */
+  /* Masonry on small screens */ }
+  #primary .products:not(.related) .product,
+  #primary .products:not(.related) .wc-block-grid__product,
+  .wc-block-grid__products .product,
+  .wc-block-grid__products .wc-block-grid__product {
+    display: inline-block;
+    width: 100% !important;
+    /* Overridden styles WooCommerce */
+    float: none !important;
+    padding: 0 !important;
+    border: none;
+    -webkit-box-flex: 0 !important;
+        -ms-flex: none !important;
+            flex: none !important;
+    max-width: 100% !important;
+    clear: none !important; }
+  #primary .products:not(.related) .product,
+  .wc-block-grid__products .product {
+    margin: 0 0 1em 0 !important; }
+  #primary .products:not(.related) .wc-block-grid__product,
+  .wc-block-grid__products .wc-block-grid__product {
+    margin: 0 0 0.6em 0 !important; }
+  #primary .products:not(.related) .product,
+  #primary .products:not(.related) .product img,
+  #primary .products:not(.related) .wc-block-grid__product .wc-block-grid__product-link,
+  #primary .products:not(.related) .wc-block-grid__product .wc-block-grid__product-image,
+  #primary .products:not(.related) .wc-block-grid__product .wc-block-grid__product-image img,
+  .wc-block-grid__products .product,
+  .wc-block-grid__products .product img,
+  .wc-block-grid__products .wc-block-grid__product .wc-block-grid__product-link,
+  .wc-block-grid__products .wc-block-grid__product .wc-block-grid__product-image,
+  .wc-block-grid__products .wc-block-grid__product .wc-block-grid__product-image img {
+    display: block;
+    margin: 0; }
+  @media only screen and (min-width: 1025px) {
+    #primary .products:not(.related),
+    .wc-block-grid__products {
+      -webkit-column-count: 4;
+         -moz-column-count: 4;
+              column-count: 4; } }
+  @media only screen and (max-width: 1024px) and (min-width: 768px) {
+    #primary .products:not(.related),
+    .wc-block-grid__products {
+      -webkit-column-count: 3;
+         -moz-column-count: 3;
+              column-count: 3; } }
+  @media only screen and (max-width: 767px) {
+    #primary .products:not(.related),
+    .wc-block-grid__products {
+      -webkit-column-count: 2;
+         -moz-column-count: 2;
+              column-count: 2; } }
+
+/* --------------------------------------------------------------
+# Custom elements - styled added classes from Gutenberg or content
+-------------------------------------------------------------- */
+/* --------------------------------------------------------------
+# Custom elements - from Gutenberg
+-------------------------------------------------------------- */
+/* --------------------------------------------------------------
+# Custom elements - from Gutenberg
+-------------------------------------------------------------- */
+/* Home hero - first section after header */
+@media screen and (min-width: 992px) {
+  .ps-home-hero {
+    padding-left: 0 !important; } }
+
+@media screen and (max-width: 991px) {
+  .ps-home-hero {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: start;
+        -ms-flex-align: start;
+            align-items: flex-start; }
+    .ps-home-hero .wp-block-column:first-child {
+      margin-right: 0 !important;
+      padding-right: 0 !important;
+      text-align: center; }
+    .ps-home-hero .wp-block-column:last-child * {
+      text-align: center; } }
+
+/* Home menu after hero */
+.ps-home-content-menu {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  list-style-type: none;
+  margin: 0;
+  padding: 0; }
+  .ps-home-content-menu li:not(:first-child) {
+    margin-left: 2em; }
+
+/* Popular collections */
+.ps-home-popular-collections {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  max-width: 1000%;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw); }
+  .ps-home-popular-collections .wp-block-columns {
+    -webkit-box-align: stretch;
+        -ms-flex-align: stretch;
+            align-items: stretch;
+    height: auto;
+    max-height: 600px;
+    min-height: 400px;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    -ms-flex-wrap: nowrap !important;
+        flex-wrap: nowrap !important; }
+  .ps-home-popular-collections .wp-block-column {
+    margin: 0 !important;
+    padding: 0 !important; }
+    .ps-home-popular-collections .wp-block-column figure {
+      margin: 0 !important;
+      height: 100%;
+      width: auto;
+      position: relative; }
+      .ps-home-popular-collections .wp-block-column figure > a {
+        display: block;
+        height: inherit; }
+      .ps-home-popular-collections .wp-block-column figure img {
+        max-width: none;
+        height: 100%;
+        width: 100%;
+        -o-object-fit: cover;
+           object-fit: cover; }
+    .ps-home-popular-collections .wp-block-column figcaption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: 2;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white !important;
+      font-size: 12px !important;
+      font-weight: bold !important;
+      font-style: normal !important;
+      text-transform: uppercase;
+      padding: 2em !important; }
+  @media only screen and (max-width: 1024px) {
+    .ps-home-popular-collections .wp-block-column {
+      -webkit-box-flex: 0 !important;
+          -ms-flex: none !important;
+              flex: none !important;
+      -ms-flex-preferred-size: unset !important;
+          flex-basis: unset !important; } }
+  @media only screen and (max-width: 1024px) and (min-width: 801px) {
+    .ps-home-popular-collections .wp-block-column {
+      width: calc(100% / 3.6) !important;
+      /* Leave 4th slide to be visible */ } }
+  @media only screen and (max-width: 800px) {
+    .ps-home-popular-collections {
+      /* Need custom breakpoint as it breaks strange */ }
+      .ps-home-popular-collections .wp-block-column {
+        width: 200px !important; } }
+
+/* Image and text call to actions */
+@media screen and (max-width: 767px) {
+  .ps-img-text-cta {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: start;
+        -ms-flex-align: start;
+            align-items: flex-start; }
+    .ps-img-text-cta .wp-block-column:first-child {
+      margin-right: 0 !important;
+      padding-right: 0 !important;
+      text-align: center; }
+    .ps-img-text-cta .wp-block-column:last-child * {
+      text-align: center; }
+    .ps-img-text-cta.ps-img-text-cta--img-right .wp-block-column:last-child {
+      -webkit-box-ordinal-group: 2;
+          -ms-flex-order: 1;
+              order: 1; }
+    .ps-img-text-cta.ps-img-text-cta--img-right .wp-block-column:first-child {
+      -webkit-box-ordinal-group: 3;
+          -ms-flex-order: 2;
+              order: 2; } }
+
 
 /*# sourceMappingURL=main.css.map*/

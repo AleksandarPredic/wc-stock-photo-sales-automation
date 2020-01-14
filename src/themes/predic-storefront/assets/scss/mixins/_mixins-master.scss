@@ -26,3 +26,20 @@
 @mixin link-transition($property) {
 	@include global-transition($property);
 }
+
+// Gutenberg two columns responsive layout
+@mixin gutenbert-2columns-responsive() {
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+
+	.wp-block-column:first-child {
+		margin-right: 0 !important;
+		padding-right: 0 !important;
+		text-align: center;
+	}
+
+	.wp-block-column:last-child * {
+		text-align: center;
+	}
+}

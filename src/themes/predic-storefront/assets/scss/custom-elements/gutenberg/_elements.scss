@@ -1,0 +1,121 @@
+/* --------------------------------------------------------------
+# Custom elements - from Gutenberg
+-------------------------------------------------------------- */
+
+/* Home hero - first section after header */
+.ps-home-hero {
+	@media screen and (min-width: $brakepoint__md-min) {
+		padding-left: 0 !important;
+	}
+
+	@media screen and (max-width: $brakepoint__md-max) {
+		@include gutenbert-2columns-responsive();
+	}
+}
+
+/* Home menu after hero */
+.ps-home-content-menu {
+	display: flex;
+	flex-wrap: nowrap;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+
+	li:not(:first-child) {
+		margin-left: 2em;
+	}
+}
+
+/* Popular collections */
+.ps-home-popular-collections {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
+	max-width: 1000%;
+	margin-left: calc(50% - 50vw);
+	margin-right: calc(50% - 50vw);
+
+	.wp-block-columns {
+		align-items: stretch;
+		height: auto;
+		max-height: 600px;
+		min-height: 400px;
+		overflow-y: hidden;
+		overflow-x: scroll;
+		flex-wrap: nowrap !important;
+	}
+
+	.wp-block-column {
+		margin: 0 !important;
+		padding: 0 !important;
+
+		figure {
+			margin: 0 !important;
+			height: 100%;
+			width: auto;
+			position: relative;
+
+			> a {
+				display: block;
+				height: inherit;
+			}
+
+			img {
+				max-width: none;
+				height: 100%;
+				width: 100%;
+				object-fit: cover;
+			}
+		}
+
+		figcaption {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			z-index: 2;
+			background-color: rgba(0, 0, 0, 0.5);
+			color: white !important;
+			font-size: 12px !important;
+			font-weight: bold !important;
+			font-style: normal !important;
+			text-transform: uppercase;
+			padding: 2em !important;
+		}
+	}
+
+	@media only screen and (max-width: $brakepoint__ipad-max) {
+		.wp-block-column {
+			flex: none !important;
+			flex-basis: unset !important;
+		}
+	}
+
+	@media only screen and (max-width: $brakepoint__ipad-max) and (min-width: 801px) {
+		.wp-block-column {
+			width: calc(100% / 3.6) !important; /* Leave 4th slide to be visible */
+		}
+	}
+
+	@media only screen and (max-width: 800px) { /* Need custom breakpoint as it breaks strange */
+		.wp-block-column {
+			width: 200px !important;
+		}
+	}
+}
+
+/* Image and text call to actions */
+.ps-img-text-cta {
+	@media screen and (max-width: $brakepoint__sm-max) {
+		@include gutenbert-2columns-responsive();
+
+		&.ps-img-text-cta--img-right {
+			.wp-block-column:last-child {
+				order: 1;
+			}
+
+			.wp-block-column:first-child {
+				order: 2;
+			}
+		}
+	}
+}

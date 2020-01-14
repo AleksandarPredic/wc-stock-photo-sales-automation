@@ -1,0 +1,38 @@
+/* --------------------------------------------------------------
+# Parent theme overrides
+-------------------------------------------------------------- */
+
+/* Make all pages full screen as we have no sidebar */
+#primary {
+	width: 100% !important;
+	margin: 0 !important;
+	float: none !important;
+}
+
+/* Many margins top */
+p + h2,
+p + header h2,
+p + h3,
+p + h4,
+ul + h2,
+ul + header h2,
+ul + h3,
+ul + h4,
+ol + h2,
+ol + header h2,
+ol + h3,
+ol + h4,
+table + h2,
+table + header h2,
+table + h3,
+table + h4,
+blockquote + h2,
+blockquote + header h2,
+blockquote + h3,
+blockquote + h4,
+form + h2,
+form + header h2,
+form + h3,
+form + h4 {
+	margin-top: 1em;
+}

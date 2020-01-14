@@ -23,3 +23,18 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 # Content
 -------------------------------------------------------------- */
 @import "site/site";
+
+/* --------------------------------------------------------------
+# Parent theme overrides
+-------------------------------------------------------------- */
+@import "theme-overrides/overrides";
+
+/* --------------------------------------------------------------
+# WooCommerce
+-------------------------------------------------------------- */
+@import "woocommerce/woocommerce";
+
+/* --------------------------------------------------------------
+# Custom elements - styled added classes from Gutenberg or content
+-------------------------------------------------------------- */
+@import "custom-elements/elements";
