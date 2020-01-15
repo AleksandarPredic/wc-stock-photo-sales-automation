@@ -1,0 +1,11 @@
+/* ----------------------------------------------------------------------------------------
+# WooCommerce messages on the site. Example: Has been added to your cart on single product
+------------------------------------------------------------------------------------------ */
+.woocommerce-message {
+	background-color: $background__grey-light;
+	color: $color__text-secondary !important;
+
+	* {
+		color: $color__text-secondary !important;
+	}
+}

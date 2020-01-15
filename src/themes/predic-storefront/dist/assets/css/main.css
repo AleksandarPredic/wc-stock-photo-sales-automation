@@ -66,6 +66,10 @@ form + h3,
 form + h4 {
   margin-top: 1em; }
 
+/* Button hover */
+.wp-block-button__link:hover {
+  text-decoration: underline !important; }
+
 /* --------------------------------------------------------------
 # WooCommerce
 -------------------------------------------------------------- */
@@ -102,7 +106,14 @@ form + h4 {
         -ms-flex: none !important;
             flex: none !important;
     max-width: 100% !important;
-    clear: none !important; }
+    clear: none !important;
+    -webkit-transition: opacity 0.25s ease-in-out;
+    transition: opacity 0.25s ease-in-out; }
+    #primary .products:not(.related) .product:hover,
+    #primary .products:not(.related) .wc-block-grid__product:hover,
+    .wc-block-grid__products .product:hover,
+    .wc-block-grid__products .wc-block-grid__product:hover {
+      opacity: 0.9; }
   #primary .products:not(.related) .product,
   .wc-block-grid__products .product {
     margin: 0 0 1em 0 !important; }
@@ -139,6 +150,113 @@ form + h4 {
       -webkit-column-count: 2;
          -moz-column-count: 2;
               column-count: 2; } }
+
+/* --------------------------------------------------------------
+## Single product page
+-------------------------------------------------------------- */
+/* --------------------------------------------------------------
+## Single product page
+-------------------------------------------------------------- */
+body.single-product .pswp__bg {
+  opacity: 0.75 !important;
+  /* Popup single image background */ }
+
+body.single-product #content .col-full {
+  max-width: 100%; }
+
+body.single-product #main > .product {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch; }
+  body.single-product #main > .product > .woocommerce-product-gallery,
+  body.single-product #main > .product > .summary {
+    float: none !important;
+    margin: 0 !important; }
+  body.single-product #main > .product > .woocommerce-product-gallery {
+    width: auto;
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    padding: 8em 5%;
+    background: #f2f2f2;
+    background: -webkit-gradient(linear, left top, right top, from(#f2f2f2), color-stop(35%, #f3f3f3), to(#c4c3c3));
+    background: linear-gradient(90deg, #f2f2f2 0%, #f3f3f3 35%, #c4c3c3 100%); }
+    body.single-product #main > .product > .woocommerce-product-gallery .woocommerce-product-gallery__trigger {
+      top: 10em;
+      right: 8%;
+      width: 3em;
+      height: 3em;
+      background: transparent; }
+      body.single-product #main > .product > .woocommerce-product-gallery .woocommerce-product-gallery__trigger:before {
+        font-size: 1.5em; }
+  body.single-product #main > .product > .summary {
+    width: 350px;
+    padding: 6em 1% 6em 5em;
+    background-color: #f7f7f7; }
+    body.single-product #main > .product > .summary .product_title {
+      font-weight: 600;
+      font-size: 1.5em;
+      line-height: 1.2; }
+    body.single-product #main > .product > .summary .variations .reset_variations,
+    body.single-product #main > .product > .summary .variations .reset_variations::before,
+    body.single-product #main > .product > .summary .variations select,
+    body.single-product #main > .product > .summary .variations .label {
+      color: #666; }
+    body.single-product #main > .product > .summary .single_variation_wrap .woocommerce-variation {
+      margin-top: 1em; }
+    body.single-product #main > .product > .summary .single_variation_wrap .woocommerce-variation-description {
+      color: #666 !important;
+      margin-top: 1em; }
+    body.single-product #main > .product > .summary .woocommerce-variation-price .price {
+      font-size: 2em;
+      line-height: 1;
+      font-weight: 700;
+      color: #333; }
+    body.single-product #main > .product > .summary .woocommerce-variation-add-to-cart .quantity {
+      display: none !important; }
+
+body.single-product #main .product_meta {
+  clear: both;
+  padding-top: 2em;
+  width: 100%;
+  -webkit-box-flex: 0;
+      -ms-flex: none;
+          flex: none;
+  margin-top: 3em; }
+  body.single-product #main .product_meta .tagged_as > a {
+    text-transform: uppercase;
+    color: #666;
+    padding: 5px 10px;
+    border: 2px solid #eee;
+    display: inline-block;
+    margin-bottom: 15px;
+    text-decoration: none;
+    -webkit-transition: background-color 0.25s ease-in-out;
+    transition: background-color 0.25s ease-in-out; }
+    body.single-product #main .product_meta .tagged_as > a:not(:last-child) {
+      margin-right: 15px; }
+    body.single-product #main .product_meta .tagged_as > a:hover {
+      background-color: #eee; }
+
+/* --------------------------------------------------------------
+# Messages
+-------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------------------
+# WooCommerce messages on the site. Example: Has been added to your cart on single product
+------------------------------------------------------------------------------------------ */
+.woocommerce-message {
+  background-color: #eee;
+  color: #222 !important; }
+  .woocommerce-message * {
+    color: #222 !important; }
 
 /* --------------------------------------------------------------
 # Custom elements - styled added classes from Gutenberg or content
@@ -197,16 +315,20 @@ form + h4 {
     -webkit-box-align: stretch;
         -ms-flex-align: stretch;
             align-items: stretch;
-    height: auto;
+    height: 100%;
     max-height: 600px;
     min-height: 400px;
     overflow-y: hidden;
-    overflow-x: scroll;
+    overflow-x: auto;
     -ms-flex-wrap: nowrap !important;
         flex-wrap: nowrap !important; }
   .ps-home-popular-collections .wp-block-column {
     margin: 0 !important;
-    padding: 0 !important; }
+    padding: 0 !important;
+    -webkit-transition: opacity 0.25s ease-in-out;
+    transition: opacity 0.25s ease-in-out; }
+    .ps-home-popular-collections .wp-block-column:hover {
+      opacity: 0.9; }
     .ps-home-popular-collections .wp-block-column figure {
       margin: 0 !important;
       height: 100%;
@@ -233,7 +355,8 @@ form + h4 {
       font-weight: bold !important;
       font-style: normal !important;
       text-transform: uppercase;
-      padding: 2em !important; }
+      padding: 2em !important;
+      pointer-events: none; }
   @media only screen and (max-width: 1024px) {
     .ps-home-popular-collections .wp-block-column {
       -webkit-box-flex: 0 !important;

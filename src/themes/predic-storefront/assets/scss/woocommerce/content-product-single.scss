@@ -1,0 +1,126 @@
+/* --------------------------------------------------------------
+## Single product page
+-------------------------------------------------------------- */
+body.single-product {
+	.pswp__bg {
+		opacity: 0.75 !important; /* Popup single image background */
+	}
+
+	#content {
+		.col-full {
+			max-width: 100%;
+		}
+	}
+
+	#main {
+		> .product {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: flex-start;
+			align-items: stretch;
+
+			> .woocommerce-product-gallery,
+			> .summary {
+				float: none !important;
+				margin: 0 !important;
+			}
+
+			> .woocommerce-product-gallery {
+				width: auto;
+				flex: 1;
+				padding: 8em 5%;
+
+				@include gradient-gray();
+
+				.woocommerce-product-gallery__trigger {
+					top: 10em;
+					right: 8%;
+					width: 3em;
+					height: 3em;
+					background: transparent;
+
+					&:before {
+						font-size: 1.5em;
+					}
+				}
+			}
+
+			> .summary {
+				width: 350px;
+				padding: 6em 1% 6em 5em;
+				background-color: $background__grey-lighter;
+
+				.product_title {
+					font-weight: 600;
+					font-size: 1.5em;
+					line-height: 1.2;
+				}
+
+				.variations {
+					.reset_variations,
+					.reset_variations::before,
+					select,
+					.label {
+						color: $color__text-third;
+					}
+				}
+
+				.single_variation_wrap {
+					.woocommerce-variation {
+						margin-top: 1em;
+					}
+
+					.woocommerce-variation-description {
+						color: $color__text-third !important;
+						margin-top: 1em;
+					}
+				}
+
+				.woocommerce-variation-price {
+					.price {
+						font-size: 2em;
+						line-height: 1;
+						font-weight: 700;
+						color: $color__text-main;
+					}
+				}
+
+				.woocommerce-variation-add-to-cart {
+					.quantity {
+						display: none !important;
+					}
+				}
+			}
+		}
+
+		.product_meta {
+			clear: both;
+			padding-top: 2em;
+			width: 100%;
+			flex: none;
+			margin-top: 3em;
+
+			.tagged_as {
+				> a {
+					text-transform: uppercase;
+					color: $color__text-third;
+					padding: 5px 10px;
+					border: 2px solid $background__grey-light;
+					display: inline-block;
+					margin-bottom: 15px;
+					text-decoration: none;
+
+					@include link-transition(background-color);
+
+					&:not(:last-child) {
+						margin-right: 15px;
+					}
+
+					&:hover {
+						background-color: $background__grey-light;
+					}
+				}
+			}
+		}
+	}
+}

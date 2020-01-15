@@ -18,8 +18,8 @@
 }
 
 // Transition to use site wide
-@mixin global-transition($property, $duration: 0.4s) {
-	transition: $property $duration ease-in-out;
+@mixin global-transition($property, $duration: $transition__duration-global) {
+	transition: $property $duration $transition__easing-global;
 }
 
 // Link transition to use site wide
@@ -42,4 +42,10 @@
 	.wp-block-column:last-child * {
 		text-align: center;
 	}
+}
+
+// Gradient background gray
+@mixin gradient-gray() {
+	background: rgb(242,242,242);
+	background: linear-gradient(90deg, rgba(242,242,242,1) 0%, rgba(243,243,243,1) 35%, rgba(196,195,195,1) 100%);
 }

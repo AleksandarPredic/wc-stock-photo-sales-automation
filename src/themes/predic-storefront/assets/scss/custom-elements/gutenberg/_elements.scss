@@ -36,17 +36,23 @@
 
 	.wp-block-columns {
 		align-items: stretch;
-		height: auto;
+		height: 100%;
 		max-height: 600px;
 		min-height: 400px;
 		overflow-y: hidden;
-		overflow-x: scroll;
+		overflow-x: auto;
 		flex-wrap: nowrap !important;
 	}
 
 	.wp-block-column {
 		margin: 0 !important;
 		padding: 0 !important;
+
+		@include global-transition(opacity);
+
+		&:hover {
+			opacity: $hover__opacity-global;
+		}
 
 		figure {
 			margin: 0 !important;
@@ -80,6 +86,7 @@
 			font-style: normal !important;
 			text-transform: uppercase;
 			padding: 2em !important;
+			pointer-events: none;
 		}
 	}
 

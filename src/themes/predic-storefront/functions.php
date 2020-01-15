@@ -32,7 +32,9 @@ require 'vendor/autoload.php';
 /**
  * WooCommerce
  */
+\PredicStorefront\WooCommerce\GlobalFilters::getInstance()->init();
 \PredicStorefront\WooCommerce\ContentProduct::getInstance()->init();
+\PredicStorefront\WooCommerce\ContentSingleProduct::getInstance()->init();
 
 /**
  * Parent theme

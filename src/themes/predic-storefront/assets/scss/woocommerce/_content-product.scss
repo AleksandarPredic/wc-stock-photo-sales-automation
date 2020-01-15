@@ -23,6 +23,12 @@
 		flex: none !important;
 		max-width: 100% !important;
 		clear: none !important;
+
+		@include global-transition(opacity);
+
+		&:hover {
+			opacity: $hover__opacity-global;
+		}
 	}
 
 	.product {

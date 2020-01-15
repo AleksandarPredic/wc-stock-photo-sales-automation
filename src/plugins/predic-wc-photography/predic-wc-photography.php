@@ -24,6 +24,8 @@
  * Implementiraj js upload odavde https://www.dropzonejs.com/#usage
  * MOzda da probam da ubacim stilove moje teme u gutenberg da se bolje vidi kako ce sta da izgleda - za admin
  * Ukloni posle popular collection na dnu sto ima linija
+ * Instagram home footer
+ * Prevod za temu poedit uraditi
  */
 
 // Do not allow directly accessing this file.

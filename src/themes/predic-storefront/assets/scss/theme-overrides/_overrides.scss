@@ -36,3 +36,10 @@ form + h3,
 form + h4 {
 	margin-top: 1em;
 }
+
+/* Button hover */
+.wp-block-button__link {
+	&:hover {
+		text-decoration: underline !important;
+	}
+}
