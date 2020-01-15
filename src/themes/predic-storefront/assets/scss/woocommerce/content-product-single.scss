@@ -6,6 +6,10 @@ body.single-product {
 		opacity: 0.75 !important; /* Popup single image background */
 	}
 
+	header.site-header {
+		border-bottom: none;
+	}
+
 	#content {
 		.col-full {
 			max-width: 100%;
@@ -18,6 +22,7 @@ body.single-product {
 			flex-wrap: wrap;
 			justify-content: flex-start;
 			align-items: stretch;
+			margin-top: 3em;
 
 			> .woocommerce-product-gallery,
 			> .summary {

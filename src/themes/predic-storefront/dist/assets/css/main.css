@@ -161,6 +161,9 @@ body.single-product .pswp__bg {
   opacity: 0.75 !important;
   /* Popup single image background */ }
 
+body.single-product header.site-header {
+  border-bottom: none; }
+
 body.single-product #content .col-full {
   max-width: 100%; }
 
@@ -175,7 +178,8 @@ body.single-product #main > .product {
           justify-content: flex-start;
   -webkit-box-align: stretch;
       -ms-flex-align: stretch;
-          align-items: stretch; }
+          align-items: stretch;
+  margin-top: 3em; }
   body.single-product #main > .product > .woocommerce-product-gallery,
   body.single-product #main > .product > .summary {
     float: none !important;
