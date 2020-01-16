@@ -28,6 +28,21 @@ class GlobalFilters implements CustomzeClassInterface
     {
         add_action('template_redirect', [$this, 'customize']);
         add_action('after_setup_theme', [$this, 'customizeEarly']);
+
+		/**
+		 * Disable limit for image size
+		 */
+		add_filter( 'big_image_size_threshold', '__return_false' );
+
+		/**
+		 * Remove filter on terms description
+		 */
+		remove_filter( 'pre_term_description', 'wp_filter_kses' );
+		if ( ! current_user_can( 'unfiltered_html' ) ) {
+			add_filter( 'pre_term_description', 'wp_filter_post_kses' );
+		}
+		remove_filter( 'term_description', 'wp_kses_data' );
+		add_filter( 'term_description', 'wp_filter_post_kses' );
     }
 
     /**

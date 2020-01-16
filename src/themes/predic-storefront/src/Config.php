@@ -26,6 +26,7 @@ class Config
     public function init()
     {
         add_action('wp_enqueue_scripts', [$this, 'scripts'], 1000);
+        add_action('after_setup_theme', [$this, 'afterThemeSetup']);
     }
 
     /**
@@ -37,5 +38,13 @@ class Config
         wp_dequeue_style('storefront-child-style');
 
         wp_enqueue_style('predic-storefront', get_stylesheet_directory_uri() . '/dist/assets/css/main.css', PREDIC_STOREFRONT_VERSION);
+    }
+
+	/**
+	 * Add our custom image size
+	 */
+    public function afterThemeSetup()
+    {
+		add_image_size( 'ps-almost-full-hd', 1600 );
     }
 }

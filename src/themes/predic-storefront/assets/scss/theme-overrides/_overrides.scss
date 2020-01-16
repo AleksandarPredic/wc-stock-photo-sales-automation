@@ -2,11 +2,14 @@
 # Parent theme overrides
 -------------------------------------------------------------- */
 
-/* Make all pages full screen as we have no sidebar */
-#primary {
-	width: 100% !important;
-	margin: 0 !important;
-	float: none !important;
+/* Make all pages full width to parent container as we have no sidebar */
+#content {
+	#primary {
+		width: 100% !important;
+		margin-left: 0 !important;
+		margin-right: 0 !important;
+		float: none !important;
+	}
 }
 
 /* Many margins top */

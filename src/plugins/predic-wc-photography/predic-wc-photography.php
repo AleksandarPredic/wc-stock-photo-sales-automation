@@ -19,11 +19,8 @@
  * Parse metadata - model sa slike i shootout name
  * Odakle ce da se upisuje price za regular i extended - da li ce da ima jednu cenu za sve slike ili cemo i to da citamo iz slike
  * Make delete product button to delete linked images and zip files. Check if product delete zip files when deleted or hOOK TO PRODUCT DELETE
- * Javi djoletu da na nekim slikama nema podesen model aparata u metadata
- * Da se prikaze neki opis ispod stranice kategorije i da moze djole da tu upisuje html
  * Implementiraj js upload odavde https://www.dropzonejs.com/#usage
  * MOzda da probam da ubacim stilove moje teme u gutenberg da se bolje vidi kako ce sta da izgleda - za admin
- * Ukloni posle popular collection na dnu sto ima linija
  * Instagram home footer
  * Prevod za temu poedit uraditi
  */

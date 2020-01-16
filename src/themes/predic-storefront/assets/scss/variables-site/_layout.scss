@@ -15,3 +15,7 @@ $brakepoint__sm-max: 767px;
 $brakepoint__sx-min: 576px;
 $brakepoint__sx-max: 575px;
 $brakepoint__sxx-max: 400px;
+
+/* Make some section outside content and this is their max-width */
+$site__forced-min-width: 1800px;
+$site__forced-max-width: 1799px;

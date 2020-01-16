@@ -94,19 +94,19 @@ class Importer implements ImporterInterface
                 $productTagsIds,
                 [
                     [
-                        'key'   => 'camera',
+                        'key'   => 'ps_camera',
                         'value' => sanitize_text_field($camera)
                     ],
                     [
-                        'key'   => 'resolution',
+                        'key'   => 'ps_resolution',
                         'value' => implode('x', array_map('sanitize_text_field', $resolution)) . 'px'
                     ],
                     [
-                        'key'   => 'type',
+                        'key'   => 'ps_type',
                         'value' => sanitize_text_field($type)
                     ],
                     [
-                        'key'   => 'camera_upload_date',
+                        'key'   => 'ps_camera_upload_date',
                         'value' => sanitize_text_field($cameraUploadDate)
                     ],
                 ]

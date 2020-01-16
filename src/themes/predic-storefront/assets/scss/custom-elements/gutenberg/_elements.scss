@@ -4,6 +4,16 @@
 
 /* Home hero - first section after header */
 .ps-home-hero {
+	.wp-block-column:first-child {
+		margin-right: 2.5% !important;
+	}
+	.wp-block-image {
+		img {
+			width: 100%;
+			height: auto;
+		}
+	}
+
 	@media screen and (min-width: $brakepoint__md-min) {
 		padding-left: 0 !important;
 	}
@@ -112,6 +122,14 @@
 
 /* Image and text call to actions */
 .ps-img-text-cta {
+	@media screen and (min-width: $brakepoint__sm-min) {
+		&.ps-img-text-cta--img-right {
+			.wp-block-column:first-child {
+				text-align: right;
+			}
+		}
+	}
+
 	@media screen and (max-width: $brakepoint__sm-max) {
 		@include gutenbert-2columns-responsive();
 
