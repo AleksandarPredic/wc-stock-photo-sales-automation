@@ -12,7 +12,7 @@
  * Domain Path: /languages
  */
 
-
+use PredicWCPhoto\Controllers\ActivationController;
 
 /**
  * Add two new taxonomies for model and shootout
@@ -37,6 +37,7 @@ if (! class_exists('PredicWCPhoto_Plugin')) {
     // Load plugin.
     $predic_wc_photography_plugin = new \PredicWCPhoto\Plugin();
     add_action('plugins_loaded', [ $predic_wc_photography_plugin, 'load' ], 20);
+	register_activation_hook( __FILE__, [ActivationController::getInstance(), 'init'] );
 
     if (! function_exists('predic_wc_photography_helpers')) {
         /**

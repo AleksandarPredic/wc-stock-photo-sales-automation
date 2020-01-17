@@ -86,6 +86,24 @@ class ImporterImageMetaDataParser extends ImporterImageMetaDataParserSchema impl
     }
 
     /**
+     * Return names of the shootout as array
+     * @return array
+     */
+    public function getShootout()
+    {
+        return $this->shootout;
+    }
+
+    /**
+     * Return models names (people) as array
+     * @return array
+     */
+    public function getModels()
+    {
+        return $this->models;
+    }
+
+    /**
      * Return Timestamp of a photo taken
      * @return int
      */
@@ -127,6 +145,11 @@ class ImporterImageMetaDataParser extends ImporterImageMetaDataParserSchema impl
                 $this->cameraUploadDate = '';
             }
         }
-        $this->keyWords      = isset($iptc['2#025']) ? $iptc['2#025'] : [];
+        $this->keyWords = isset($iptc['2#025']) ? $iptc['2#025'] : [];
+
+        $categories = isset($iptc['2#020']) && is_array($iptc['2#020']) ? $iptc['2#020'] : [];
+
+        $this->shootout = ! empty($categories) ? [array_shift($iptc['2#020'])] : [];
+        $this->models   = ! empty($categories) ? $iptc['2#020'] : [];
     }
 }

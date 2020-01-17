@@ -3,7 +3,7 @@
 namespace PredicStorefront\ParentTheme;
 
 use PredicStorefront\Contracts\CustomzeClassInterface;
-use PredicWCPhoto\Traits\SingletonTrait;
+use PredicStorefront\Traits\SingletonTrait;
 
 /**
  * Class RemoveActions

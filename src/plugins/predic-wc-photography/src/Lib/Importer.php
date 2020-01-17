@@ -11,6 +11,25 @@ use PredicWCPhoto\Contracts\ImporterInterface;
  */
 class Importer implements ImporterInterface
 {
+
+    /**
+     * Importer terms class instance
+     * @var \PredicWCPhoto\Contracts\ImporterTermInterface
+     */
+    private $importerTerms;
+
+    /**
+     * Instance of the class responsible to register taxonomies
+     * @var WCTaxonomies
+     */
+    private $taxonomies;
+
+    public function __construct()
+    {
+        $this->importerTerms = ImporterTermFactory::make();
+        $this->taxonomies    = WCTaxonomies::getInstance();
+    }
+
     /**
      * Return parent product id
      *
@@ -43,28 +62,20 @@ class Importer implements ImporterInterface
              */
             $metaDataParser = ImporterImageMetaDataFactory::make();
             $metaDataParser->parse($tmpName);
-            $camera               = $metaDataParser->getCamera();
-            $resolution           = $metaDataParser->getResolution();
-            $type                 = $metaDataParser->getType();
-            $productName          = ! empty($metaDataParser->getName()) ? $metaDataParser->getName() : ucfirst(str_replace('-', ' ', $productSlug));
-            $description          = $metaDataParser->getDescription();
-            $cameraUploadDate     = $metaDataParser->getCameraUploadDate();
-            $terms                = $metaDataParser->getKeywords();
+            $camera          = $metaDataParser->getCamera();
+            $resolution      = $metaDataParser->getResolution();
+            $type            = $metaDataParser->getType();
+            $productName     = ! empty($metaDataParser->getName()) ? $metaDataParser->getName() : ucfirst(str_replace('-', ' ', $productSlug));
+            $description     = $metaDataParser->getDescription();
+            $cameraUploadDate= $metaDataParser->getCameraUploadDate();
+            $keywords        = $metaDataParser->getKeywords();
+            $shootouts       = $metaDataParser->getShootout(); // Must be an array
+            $models          = $metaDataParser->getModels(); // Must be an array
 
             /**
              * Parse tags ids form keywords
              */
-            $productTagsIds = [];
-            $importerTerms  = ImporterTermFactory::make();
-            if (!empty($terms)) {
-                foreach ($terms as $term) {
-                    try {
-                        $productTagsIds[] = $importerTerms->import($term, 'product_tag');
-                    } catch (\Exception $e) {
-                        // TODO: Add logger so we don't interrupt import process as this is not crucial
-                    }
-                }
-            }
+            $productTagsIds = $this->parseTerms($keywords, 'product_tag');
 
             /**
              * Handle image manipulation
@@ -80,7 +91,7 @@ class Importer implements ImporterInterface
             /**
              * Create products data
              */
-            $wcImporter = new WCImporter();
+            $wcImporter = new WCImporter(WCTaxonomies::getInstance());
             $wcImporter->setData(
                 $productName,
                 $productSlug,
@@ -109,6 +120,11 @@ class Importer implements ImporterInterface
                         'key'   => 'ps_camera_upload_date',
                         'value' => sanitize_text_field($cameraUploadDate)
                     ],
+                ],
+                // Add all custom taxonomies here [ [taxonomy_id => [array of ids] ] ]
+                [
+                    $this->taxonomies::SHOOTOUTS_ID => $shootouts,
+                    $this->taxonomies::MODELS_ID    => $models,
                 ]
             );
 
@@ -144,5 +160,29 @@ class Importer implements ImporterInterface
         }
 
         return $result;
+    }
+
+	/**
+	 * Import terms and create missing ones to a taxonomy
+	 * @param array $terms Array of terms names, not slugs
+	 * @param string $taxonomy Taxonomy to add terms to. Must exists
+	 * @return array Return array of WP db ids of processed terms
+	 */
+    private function parseTerms($terms, $taxonomy)
+    {
+        $termsIds = [];
+        if (empty($terms)) {
+            return $termsIds;
+        }
+
+        foreach ($terms as $term) {
+            try {
+                $termsIds[] = $this->importerTerms->import($term, $taxonomy);
+            } catch (\Exception $e) {
+                // TODO: Add logger so we don't interrupt import process as this is not crucial
+            }
+        }
+
+        return $termsIds;
     }
 }

@@ -14,6 +14,7 @@ namespace PredicWCPhoto;
 use PredicWCPhoto\Admin\AdminMenuPages;
 use PredicWCPhoto\Controllers\ImporterController;
 use PredicWCPhoto\Lib\Importer;
+use PredicWCPhoto\Lib\WCTaxonomies;
 
 if (! defined('ABSPATH')) {
     exit('Direct script access denied.');
@@ -44,7 +45,7 @@ class Plugin
      */
     public function __construct()
     {
-        $this->loaded      = false;
+        $this->loaded = false;
     }
 
     /**
@@ -88,32 +89,35 @@ class Plugin
         add_action('init', [ $plugin_i18n, 'loadPluginTextdomain' ]);
 
         /**
+         * Register custom taxonomies
+         */
+        WCTaxonomies::getInstance()->init();
+
+        /**
          * Enqueue scripts and styles.
          */
         // TODO: Enable or delete scripts
         //new Scripts();
 
-        /**
-         * Admin submenu page
-         */
-        AdminMenuPages::getInstance()->build();
+        if (is_admin()) {
 
-        /**
-         * Importer controller
-         */
-		new ImporterController(new Importer());
+            /**
+             * Admin submenu page
+             */
+            AdminMenuPages::getInstance()->build();
+
+            /**
+             * Importer controller
+             */
+            new ImporterController(new Importer());
+
+            // Set all as loaded.
+            $this->loaded = true;
+
+            return;
+        }
 
         // Set all as loaded.
         $this->loaded = true;
-    }
-
-    /**
-     * Fired during plugin activation.
-     *
-     * @access public
-     * @since 0.0.1
-     */
-    public function activation()
-    {
     }
 }

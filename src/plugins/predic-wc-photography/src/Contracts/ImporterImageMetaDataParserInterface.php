@@ -57,4 +57,16 @@ interface ImporterImageMetaDataParserInterface
      * @return int
      */
     public function getCameraUploadDate();
+
+    /**
+     * Return names of the shootout as array
+     * @return array
+     */
+    public function getShootout();
+
+    /**
+     * Return models names (people) as array
+     * @return array
+     */
+    public function getModels();
 }

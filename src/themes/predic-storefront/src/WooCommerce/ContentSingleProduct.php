@@ -3,7 +3,7 @@
 namespace PredicStorefront\WooCommerce;
 
 use PredicStorefront\Contracts\CustomzeClassInterface;
-use PredicWCPhoto\Traits\SingletonTrait;
+use PredicStorefront\Traits\SingletonTrait;
 
 /**
  * Class ContentSingleProduct
@@ -46,9 +46,9 @@ class ContentSingleProduct implements CustomzeClassInterface
          */
         remove_all_actions('woocommerce_after_single_product_summary');
 
-		/**
-		 * Hook: woocommerce_after_single_product
-		 */
+        /**
+         * Hook: woocommerce_after_single_product
+         */
         add_action('woocommerce_after_single_product', 'woocommerce_template_single_meta', 10);
 
         /**
