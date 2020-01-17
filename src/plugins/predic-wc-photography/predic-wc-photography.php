@@ -15,14 +15,13 @@
 use PredicWCPhoto\Controllers\ActivationController;
 
 /**
- * Add two new taxonomies for model and shootout
- * Parse metadata - model sa slike i shootout name
  * Odakle ce da se upisuje price za regular i extended - da li ce da ima jednu cenu za sve slike ili cemo i to da citamo iz slike
  * Make delete product button to delete linked images and zip files. Check if product delete zip files when deleted or hOOK TO PRODUCT DELETE
  * Implementiraj js upload odavde https://www.dropzonejs.com/#usage
  * MOzda da probam da ubacim stilove moje teme u gutenberg da se bolje vidi kako ce sta da izgleda - za admin
  * Instagram home footer
  * Prevod za temu poedit uraditi
+ * Sakriti slike proizvoda u media gallery da se ne mesaju sa ostalima. https://wordpress.stackexchange.com/questions/76771/how-can-i-hide-media-library-images-from-general-users
  */
 
 // Do not allow directly accessing this file.
