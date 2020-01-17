@@ -134,7 +134,7 @@ class ImporterImageMetaDataParser extends ImporterImageMetaDataParserSchema impl
         $size = getimagesize($this->imagePath, $info);
         $iptc = is_array($info) && isset($info["APP13"]) ? iptcparse($info["APP13"]) : [];
 
-        $this->name                 = isset($iptc['2#005'][0]) ? $iptc['2#005'][0] : '';
+        $this->name                 = isset($iptc['2#105'][0]) ? $iptc['2#105'][0] : '';
         $this->description          = isset($iptc['2#120'][0]) ? $iptc['2#120'][0] : '';
         $cameraUploadDate           = isset($iptc['2#055'][0]) ? $iptc['2#055'][0] : '';
         if (! empty($cameraUploadDate)) {
@@ -147,9 +147,12 @@ class ImporterImageMetaDataParser extends ImporterImageMetaDataParserSchema impl
         }
         $this->keyWords = isset($iptc['2#025']) ? $iptc['2#025'] : [];
 
-        $categories = isset($iptc['2#020']) && is_array($iptc['2#020']) ? $iptc['2#020'] : [];
+        $categories = isset($iptc['2#040'][0]) && ! empty($iptc['2#040'][0]) ? $iptc['2#040'][0] : [];
+        $categories = ! empty($categories) ? explode(';', $categories) : [];
 
-        $this->shootout = ! empty($categories) ? [array_shift($iptc['2#020'])] : [];
-        $this->models   = ! empty($categories) ? $iptc['2#020'] : [];
+        $this->shootout = ! empty($categories) ? [array_shift($categories)] : [];
+        $this->models   = ! empty($categories) ? array_filter($categories, function($value){
+        	return ! empty($value);
+		}) : [];
     }
 }
