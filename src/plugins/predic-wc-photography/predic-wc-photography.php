@@ -21,12 +21,7 @@ use PredicWCPhoto\Controllers\ActivationController;
  * MOzda da probam da ubacim stilove moje teme u gutenberg da se bolje vidi kako ce sta da izgleda - za admin
  * Instagram home footer
  * Prevod za temu poedit uraditi
- * Sakriti slike proizvoda u media gallery da se ne mesaju sa ostalima. https://wordpress.stackexchange.com/questions/76771/how-can-i-hide-media-library-images-from-general-users
  * U source polje tj iptc 2#115 upisivacemo cenu 99, 999 - + polje za default sitewide za fallback ako nema upisano u file
- * U source polje tj iptc 2#105 upisivacemo headline tj ovo vec sam implementirao
- * u headline upisujemo naziv dokumenta i od toga generisemo i slug
- * models i shootout je 2#040 kao string odvojen sa ; - uradjeno
- * djole da razmisli za jedinstven i identifikator za sku, za sada koristimo ime fajla
  *
  */
 

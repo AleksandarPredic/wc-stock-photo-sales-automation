@@ -13,6 +13,7 @@ namespace PredicWCPhoto;
 // Do not allow directly accessing this file.
 use PredicWCPhoto\Admin\AdminMenuPages;
 use PredicWCPhoto\Controllers\ImporterController;
+use PredicWCPhoto\Controllers\MediaLibraryController;
 use PredicWCPhoto\Lib\Importer;
 use PredicWCPhoto\Lib\WCTaxonomies;
 
@@ -92,6 +93,11 @@ class Plugin
          * Register custom taxonomies
          */
         WCTaxonomies::getInstance()->init();
+
+		/**
+		 * Control visibility in media library (hide or show product images)
+		 */
+		MediaLibraryController::getInstance()->init();
 
         /**
          * Enqueue scripts and styles.

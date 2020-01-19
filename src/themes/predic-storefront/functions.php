@@ -40,5 +40,3 @@ require 'vendor/autoload.php';
  * Parent theme
  */
 \PredicStorefront\ParentTheme\RemoveActions::getInstance()->init();
-
-
