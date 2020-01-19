@@ -15,13 +15,11 @@
 use PredicWCPhoto\Controllers\ActivationController;
 
 /**
- * Odakle ce da se upisuje price za regular i extended - da li ce da ima jednu cenu za sve slike ili cemo i to da citamo iz slike
  * Make delete product button to delete linked images and zip files. Check if product delete zip files when deleted or hOOK TO PRODUCT DELETE
  * Implementiraj js upload odavde https://www.dropzonejs.com/#usage
  * MOzda da probam da ubacim stilove moje teme u gutenberg da se bolje vidi kako ce sta da izgleda - za admin
  * Instagram home footer
  * Prevod za temu poedit uraditi
- * U source polje tj iptc 2#115 upisivacemo cenu 99, 999 - + polje za default sitewide za fallback ako nema upisano u file
  *
  */
 

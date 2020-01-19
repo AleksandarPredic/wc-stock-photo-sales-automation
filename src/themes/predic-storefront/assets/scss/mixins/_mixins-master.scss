@@ -46,8 +46,8 @@
 
 // Gradient background gray
 @mixin gradient-gray() {
-	background: rgb(242,242,242);
-	background: linear-gradient(90deg, rgba(242,242,242,1) 0%, rgba(243,243,243,1) 35%, rgba(196,195,195,1) 100%);
+	background: rgb(242, 242, 242);
+	background: linear-gradient(90deg, rgba(242, 242, 242, 1) 0%, rgba(243, 243, 243, 1) 35%, rgba(196, 195, 195, 1) 100%);
 }
 
 // Link hover

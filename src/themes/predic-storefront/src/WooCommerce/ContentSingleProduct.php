@@ -57,6 +57,28 @@ class ContentSingleProduct implements CustomzeClassInterface
         add_filter('woocommerce_gallery_image_size', function ($size) {
             return wp_is_mobile() ? $size : 'ps-almost-full-hd';
         }, 1, 20);
+
+        /**
+         * Add single product image class for aspect ration
+         */
+        add_filter('woocommerce_single_product_image_gallery_classes', function ($classes) {
+            $product = wc_get_product(get_the_ID());
+            $imageId = $product->get_image_id();
+
+            if (empty($imageId)) {
+                return $classes;
+            }
+
+            $imageMetadata = wp_get_attachment_metadata($imageId);
+
+            if (empty($imageMetadata)) {
+                return $classes;
+            }
+
+            $classes[] = $imageMetadata['width'] >= $imageMetadata['height'] ? 'ps-woocommerce-product-gallery--landscape' : 'ps-woocommerce-product-gallery--portrait';
+
+            return $classes;
+        }, 1, 20);
     }
 
     /**
