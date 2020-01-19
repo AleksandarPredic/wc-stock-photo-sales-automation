@@ -2,9 +2,15 @@
 
 namespace PredicWCPhoto\Controllers;
 
+use PredicWCPhoto\Contracts\ControllerInterface;
 use PredicWCPhoto\Contracts\ImporterInterface;
 
-class ImporterController
+/**
+ * Class ImporterController
+ *
+ * @package PredicWCPhoto\Controllers
+ */
+class ImporterController implements ControllerInterface
 {
 
     /**
@@ -38,11 +44,10 @@ class ImporterController
         $this->formAction    = str_replace('-', '_', sprintf('%s_import_form_action', $this->pluginSlug));
         $this->formNonceName = str_replace('-', '_', sprintf('%s_import_form_nonce_name', $this->pluginSlug));
 
-        $this->load();
         $this->importer = $importer;
     }
 
-    public function load()
+    public function init()
     {
         add_action(
             str_replace('-', '_', sprintf('%s_page_import', $this->pluginSlug)),
@@ -122,7 +127,7 @@ class ImporterController
         for ($i = 0; $i < count($_FILES['files']['name']); $i++) {
             $photos[] = [
                 'filename' => $_FILES['files']['name'][$i],
-                'path' => $_FILES['files']['tmp_name'][$i]
+                'path'     => $_FILES['files']['tmp_name'][$i]
             ];
         }
 

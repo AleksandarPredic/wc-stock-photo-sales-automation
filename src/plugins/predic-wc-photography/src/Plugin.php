@@ -12,6 +12,7 @@ namespace PredicWCPhoto;
 
 // Do not allow directly accessing this file.
 use PredicWCPhoto\Admin\AdminMenuPages;
+use PredicWCPhoto\Controllers\CustomizerController;
 use PredicWCPhoto\Controllers\ImporterController;
 use PredicWCPhoto\Controllers\MediaLibraryController;
 use PredicWCPhoto\Lib\Importer;
@@ -99,6 +100,11 @@ class Plugin
 		 */
 		MediaLibraryController::getInstance()->init();
 
+		/**
+		 * Customizer controller
+		 */
+		CustomizerController::getInstance()->init();
+
         /**
          * Enqueue scripts and styles.
          */
@@ -115,7 +121,8 @@ class Plugin
             /**
              * Importer controller
              */
-            new ImporterController(new Importer());
+            $importerController = new ImporterController(new Importer());
+			$importerController->init();
 
             // Set all as loaded.
             $this->loaded = true;

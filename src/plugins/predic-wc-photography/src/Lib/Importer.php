@@ -3,6 +3,9 @@
 namespace PredicWCPhoto\Lib;
 
 use PredicWCPhoto\Contracts\ImporterInterface;
+use PredicWCPhoto\Contracts\ImporterTermInterface;
+use PredicWCPhoto\Data\Models\CustomizerModel;
+use PredicWCPhoto\Helpers\PricesHelper;
 
 /**
  * Class Importer
@@ -14,7 +17,7 @@ class Importer implements ImporterInterface
 
     /**
      * Importer terms class instance
-     * @var \PredicWCPhoto\Contracts\ImporterTermInterface
+     * @var ImporterTermInterface
      */
     private $importerTerms;
 
@@ -71,6 +74,22 @@ class Importer implements ImporterInterface
             $keywords        = $metaDataParser->getKeywords();
             $shootouts       = $metaDataParser->getShootout(); // Must be an array
             $models          = $metaDataParser->getModels(); // Must be an array
+            $prices          = $metaDataParser->getPrices(); // Must be an array
+
+            /**
+             * Before we proceed we need to validate we have product prices
+             */
+            if (empty($prices)) {
+                $prices = CustomizerModel::getInstance()->getPrices();
+                $prices = ! empty($prices) ? PricesHelper::getInstance()->validate(explode(';', $prices)) : [];
+
+                if (empty($prices)) {
+                    throw new \Exception(
+                        esc_html__('Product prices are not set. Import aborted.', 'predic-wc-photography'),
+                        400
+                    );
+                }
+            }
 
             /**
              * Parse tags ids form keywords
@@ -91,16 +110,13 @@ class Importer implements ImporterInterface
             /**
              * Create products data
              */
-            $wcImporter = new WCImporter(WCTaxonomies::getInstance());
+            $wcImporter = new WCImporter();
             $wcImporter->setData(
                 $productName,
                 $productSlug,
                 '',
                 $description,
-                [
-                    99, // Regular price
-                    999 // Extended price
-                ],
+                $prices,
                 $imageId,
                 $productTagsIds,
                 [
@@ -162,12 +178,12 @@ class Importer implements ImporterInterface
         return $result;
     }
 
-	/**
-	 * Import terms and create missing ones to a taxonomy
-	 * @param array $terms Array of terms names, not slugs
-	 * @param string $taxonomy Taxonomy to add terms to. Must exists
-	 * @return array Return array of WP db ids of processed terms
-	 */
+    /**
+     * Import terms and create missing ones to a taxonomy
+     * @param array $terms Array of terms names, not slugs
+     * @param string $taxonomy Taxonomy to add terms to. Must exists
+     * @return array Return array of WP db ids of processed terms
+     */
     private function parseTerms($terms, $taxonomy)
     {
         $termsIds = [];

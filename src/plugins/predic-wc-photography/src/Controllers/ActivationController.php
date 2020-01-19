@@ -2,6 +2,7 @@
 
 namespace PredicWCPhoto\Controllers;
 
+use PredicWCPhoto\Contracts\ControllerInterface;
 use PredicWCPhoto\Lib\WCTaxonomies;
 use PredicWCPhoto\Traits\SingletonTrait;
 
@@ -10,7 +11,7 @@ use PredicWCPhoto\Traits\SingletonTrait;
  *
  * @package PredicWCPhoto\Controllers
  */
-class ActivationController
+class ActivationController implements ControllerInterface
 {
     use SingletonTrait;
 

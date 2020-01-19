@@ -69,4 +69,11 @@ interface ImporterImageMetaDataParserInterface
      * @return array
      */
     public function getModels();
+
+    /**
+     * Return prices as array [regular, extended]
+     *
+     * @@return  array
+     */
+    public function getPrices();
 }

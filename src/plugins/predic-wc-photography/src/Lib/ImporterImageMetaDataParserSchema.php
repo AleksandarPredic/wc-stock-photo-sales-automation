@@ -46,21 +46,28 @@ class ImporterImageMetaDataParserSchema
      */
     protected $keyWords;
 
-	/**
-	 * Names of the shootout to be added as custom taxonomy
-	 * @var array
-	 */
-	protected $shootout;
+    /**
+     * Names of the shootout to be added as custom taxonomy
+     * @var array
+     */
+    protected $shootout;
 
-	/**
-	 * Name of the models to be added as custom taxonomy
-	 * @var array
-	 */
-	protected $models;
+    /**
+     * Name of the models to be added as custom taxonomy
+     * @var array
+     */
+    protected $models;
 
     /**
      * Timestamp of a photo taken - recorded in camera device
      * @var int
      */
     protected $cameraUploadDate;
+
+    /**
+     * Prices as array [regular, extended]
+     *
+     * @var array
+     */
+    protected $prices;
 }

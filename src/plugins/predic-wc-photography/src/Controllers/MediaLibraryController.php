@@ -2,6 +2,7 @@
 
 namespace PredicWCPhoto\Controllers;
 
+use PredicWCPhoto\Contracts\ControllerInterface;
 use PredicWCPhoto\Traits\SingletonTrait;
 
 /**
@@ -9,39 +10,39 @@ use PredicWCPhoto\Traits\SingletonTrait;
  *
  * @package PredicWCPhoto\Controllers
  */
-class MediaLibraryController
+class MediaLibraryController implements ControllerInterface
 {
     use SingletonTrait;
 
-	/**
-	 * Disable media library filter
-	 * @var bool
-	 */
+    /**
+     * Disable media library filter
+     * @var bool
+     */
     private $hideProductImages = true;
 
-	/**
-	 * MediaLibraryController constructor.
-	 */
+    /**
+     * MediaLibraryController constructor.
+     */
     private function __construct()
     {
     }
 
-	/**
-	 * Add hooks
-	 */
+    /**
+     * Add hooks
+     */
     public function init()
     {
-    	if (! $this->hideProductImages) {
-    		return;
-		}
+        if (! $this->hideProductImages) {
+            return;
+        }
         add_filter('ajax_query_attachments_args', [$this, 'filters']);
     }
 
-	/**
-	 * Add where clause
-	 * @param string $where
-	 * @return string
-	 */
+    /**
+     * Add where clause
+     * @param string $where
+     * @return string
+     */
     public function where($where)
     {
         global $wpdb;
@@ -50,11 +51,11 @@ class MediaLibraryController
         return $where;
     }
 
-	/**
-	 * Add join clause
-	 * @param string $join
-	 * @return string
-	 */
+    /**
+     * Add join clause
+     * @param string $join
+     * @return string
+     */
     public function join($join)
     {
         global $wpdb;
@@ -65,7 +66,7 @@ class MediaLibraryController
     }
 
     /**
-	 * Filter media library and hide product images
+     * Filter media library and hide product images
      * @param array $query An array of query variables.
      * @return mixed
      */

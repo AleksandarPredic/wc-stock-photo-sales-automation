@@ -3,6 +3,7 @@
 namespace PredicWCPhoto\Lib;
 
 use PredicWCPhoto\Contracts\ImporterImageMetaDataParserInterface;
+use PredicWCPhoto\Helpers\PricesHelper;
 
 /**
  * Class ImporterImageMetaDataParser
@@ -113,6 +114,16 @@ class ImporterImageMetaDataParser extends ImporterImageMetaDataParserSchema impl
     }
 
     /**
+     * Return prices as array [regular, extended]
+     *
+     * @@return  array
+     */
+    public function getPrices()
+    {
+        return $this->prices;
+    }
+
+    /**
      * Set metadata which can be read using exif_read_data function
      */
     private function setExifData()
@@ -147,12 +158,14 @@ class ImporterImageMetaDataParser extends ImporterImageMetaDataParserSchema impl
         }
         $this->keyWords = isset($iptc['2#025']) ? $iptc['2#025'] : [];
 
-        $categories = isset($iptc['2#040'][0]) && ! empty($iptc['2#040'][0]) ? $iptc['2#040'][0] : [];
-        $categories = ! empty($categories) ? explode(';', $categories) : [];
-
+        $categories     = isset($iptc['2#040'][0]) && ! empty($iptc['2#040'][0]) ? $iptc['2#040'][0] : [];
+        $categories     = ! empty($categories) ? explode(';', $categories) : [];
         $this->shootout = ! empty($categories) ? [array_shift($categories)] : [];
-        $this->models   = ! empty($categories) ? array_filter($categories, function($value){
-        	return ! empty($value);
-		}) : [];
+        $this->models   = ! empty($categories) ? array_filter($categories, function ($value) {
+            return ! empty($value);
+        }) : [];
+
+        $this->prices = isset($iptc['2#115'][0]) && ! empty($iptc['2#115'][0]) ? explode(';', $iptc['2#115'][0]) : [];
+        $this->prices = PricesHelper::getInstance()->validate($this->prices); // Prices will always be array even empty
     }
 }
