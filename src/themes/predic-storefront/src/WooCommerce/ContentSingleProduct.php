@@ -50,6 +50,8 @@ class ContentSingleProduct implements CustomzeClassInterface
          * Hook: woocommerce_after_single_product
          */
         add_action('woocommerce_after_single_product', 'woocommerce_template_single_meta', 10);
+        add_action('woocommerce_after_single_product', [TaxonomyShootout::getInstance(), 'render'], 20);
+        add_action('woocommerce_after_single_product', [TaxonomyModels::getInstance(), 'render'], 30);
 
         /**
          * Modify single product image size for desktops

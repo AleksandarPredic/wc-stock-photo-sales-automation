@@ -17,10 +17,9 @@ use PredicWCPhoto\Controllers\ActivationController;
 /**
  * Make delete product button to delete linked images and zip files. Check if product delete zip files when deleted or hOOK TO PRODUCT DELETE
  * Implementiraj js upload odavde https://www.dropzonejs.com/#usage
- * MOzda da probam da ubacim stilove moje teme u gutenberg da se bolje vidi kako ce sta da izgleda - za admin
  * Instagram home footer
  * Prevod za temu poedit uraditi
- *
+ * Uradi npm run prod pred postavljanje
  */
 
 // Do not allow directly accessing this file.

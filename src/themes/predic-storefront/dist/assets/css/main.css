@@ -186,7 +186,8 @@ body.single-product .edit-link {
   display: none; }
 
 body.single-product #main {
-  /* Custom product meta */ }
+  /* Custom product meta */
+  /* More from this model and shootout */ }
   body.single-product #main > .product {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -285,6 +286,12 @@ body.single-product #main {
         margin-right: 15px; }
       body.single-product #main .product_meta .tagged_as > a:hover {
         background-color: #eee; }
+  body.single-product #main .ps-models,
+  body.single-product #main .ps-shootouts {
+    margin: 3em 0 6em 0; }
+    body.single-product #main .ps-models h2,
+    body.single-product #main .ps-shootouts h2 {
+      font-weight: 600; }
 
 @media screen and (min-width: 1440px) {
   body.single-product #main > .product {

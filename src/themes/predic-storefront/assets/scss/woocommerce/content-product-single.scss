@@ -183,6 +183,16 @@ body.single-product {
 				}
 			}
 		}
+
+		/* More from this model and shootout */
+		.ps-models,
+		.ps-shootouts {
+			margin: 3em 0 6em 0;
+
+			h2 {
+				font-weight: 600;
+			}
+		}
 	}
 
 	@media screen and (min-width: $product__single-forced-min-width) {
