@@ -20,6 +20,7 @@ use PredicWCPhoto\Controllers\ActivationController;
  * Instagram home footer
  * Prevod za temu poedit uraditi
  * Uradi npm run prod pred postavljanje
+ * Na single product dodati request buyout
  */
 
 // Do not allow directly accessing this file.
