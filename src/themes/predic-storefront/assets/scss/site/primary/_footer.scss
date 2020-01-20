@@ -1,0 +1,36 @@
+/* --------------------------------------------------------------
+# Footer
+-------------------------------------------------------------- */
+.site-footer {
+	.footer-widgets {
+		display: grid;
+		grid-gap: 4%;
+
+		> .block {
+			width: auto !important;
+			float: none !important;
+			margin: 0 !important;
+
+			&:first-child {
+				grid-column-start: 1;
+			}
+		}
+
+		@media screen and (min-width: $brakepoint__lg-min) {
+			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		}
+
+		@media screen and (max-width: $brakepoint__lg-max) and (min-width: $brakepoint__sx-min) {
+			grid-template-columns: repeat(2, 1fr);
+			grid-template-rows: repeat(2, auto);
+		}
+
+		@media screen and (max-width: $brakepoint__sx-max) {
+			display: block;
+		}
+	}
+
+	.site-info {
+		text-align: center;
+	}
+}

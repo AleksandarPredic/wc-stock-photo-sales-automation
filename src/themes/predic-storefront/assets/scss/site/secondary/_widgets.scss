@@ -3,4 +3,16 @@
 	select {
 		max-width: 100%;
 	}
+
+	&.widget_nav_menu {
+		ul {
+			li {
+				padding-left: 0;
+
+				&::before {
+					display: none;
+				}
+			}
+		}
+	}
 }

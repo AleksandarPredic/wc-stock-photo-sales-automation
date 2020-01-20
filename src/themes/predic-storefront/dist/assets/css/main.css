@@ -18,10 +18,29 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
   /* Make sure select elements fit in widgets. */ }
   .widget select {
     max-width: 100%; }
+  .widget.widget_nav_menu ul li {
+    padding-left: 0; }
+    .widget.widget_nav_menu ul li::before {
+      display: none; }
 
 /* --------------------------------------------------------------
 # Content
 -------------------------------------------------------------- */
+/* --------------------------------------------------------------
+## Comments
+-------------------------------------------------------------- */
+/* --------------------------------------------------------------
+# Header
+-------------------------------------------------------------- */
+.site-header .widget_product_search form .screen-reader-text {
+  border: none; }
+
+.site-header .widget_product_search form .search-field {
+  background-color: transparent;
+  border: none;
+  -webkit-box-shadow: none;
+          box-shadow: none; }
+
 /* --------------------------------------------------------------
 ## Comments
 -------------------------------------------------------------- */
@@ -40,6 +59,35 @@ body.archive #primary {
     text-decoration: underline; }
     body.archive #primary .term-description a:hover {
       text-decoration: none; }
+
+/* --------------------------------------------------------------
+# Footer
+-------------------------------------------------------------- */
+/* --------------------------------------------------------------
+# Footer
+-------------------------------------------------------------- */
+.site-footer .footer-widgets {
+  display: grid;
+  grid-gap: 4%; }
+  .site-footer .footer-widgets > .block {
+    width: auto !important;
+    float: none !important;
+    margin: 0 !important; }
+    .site-footer .footer-widgets > .block:first-child {
+      grid-column-start: 1; }
+  @media screen and (min-width: 1200px) {
+    .site-footer .footer-widgets {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); } }
+  @media screen and (max-width: 1199px) and (min-width: 576px) {
+    .site-footer .footer-widgets {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, auto); } }
+  @media screen and (max-width: 575px) {
+    .site-footer .footer-widgets {
+      display: block; } }
+
+.site-footer .site-info {
+  text-align: center; }
 
 /* --------------------------------------------------------------
 # Parent theme overrides

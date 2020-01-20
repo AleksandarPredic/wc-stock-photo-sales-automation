@@ -1,0 +1,18 @@
+/* --------------------------------------------------------------
+# Header
+-------------------------------------------------------------- */
+.site-header {
+	.widget_product_search {
+		form {
+			.screen-reader-text {
+				border: none;
+			}
+
+			.search-field {
+				background-color: transparent;
+				border: none;
+				box-shadow: none;
+			}
+		}
+	}
+}
