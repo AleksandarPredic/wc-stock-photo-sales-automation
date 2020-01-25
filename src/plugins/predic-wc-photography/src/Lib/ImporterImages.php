@@ -30,7 +30,7 @@ class ImporterImages implements ImporterImagesInterface
 	 * Optimize images before WP import them
 	 * @var bool
 	 */
-    private $optimizeImages = false;
+    private $optimizeImages = true;
 
     /**
      * @var string
@@ -111,17 +111,23 @@ class ImporterImages implements ImporterImagesInterface
         $img->save($tmpFilePath, self::IMAGE_QUALITY);
 
         /**
-         * Optimize image
+         * Optimize image using Imagick PHP extension
          *
-         * @important: Make sure server has installed or nothing will happen
-         *
-         * apt-get install jpegoptim
-         *
-         * https://packagist.org/packages/spatie/image-optimizer
+         * @important: Make sure server has installed Imagick extension
+		 *
+		 * @see https://www.php.net/manual/en/imagick.stripimage.php
+		 *
+		 * Sligthly better result can be achieved using https://github.com/spatie/image-optimizer
+		 * but it depends on the proc_open to be enabled on the server which isn't the case on most of the shared hostings
          */
-        if ($this->optimizeImages) {
-			$optimizerChain = ImageOptimizer::create();
-			$optimizerChain->optimize($tmpFilePath);
+        if ($this->optimizeImages && extension_loaded('imagick')) {
+			$iMagick = new \Imagick($tmpFilePath);
+			$iMagick->setImageCompression(\Imagick::COMPRESSION_JPEG);
+			$iMagick->setImageCompressionQuality(self::IMAGE_QUALITY);
+			$iMagick->setImageFormat('jpg');
+			$iMagick->stripImage();
+			$iMagick->writeImage($tmpFilePath);
+			$iMagick->clear();
 		}
 
         $fileArray = [
