@@ -21,6 +21,7 @@ use PredicWCPhoto\Controllers\ActivationController;
  * Prevod za temu poedit uraditi
  * Uradi npm run prod pred postavljanje
  * Na single product dodati request buyout
+ * Add setting for enabling image optimizer
  */
 
 // Do not allow directly accessing this file.

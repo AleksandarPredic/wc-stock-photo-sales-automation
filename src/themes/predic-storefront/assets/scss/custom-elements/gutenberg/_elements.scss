@@ -30,10 +30,13 @@
 	flex-wrap: nowrap;
 	list-style-type: none;
 	margin: 0;
-	padding: 0;
+	padding: 0 0 10px 0; /* Some space for scrollbar on mobile */
+	overflow-y: hidden;
+	overflow-x: auto;
 
 	li:not(:first-child) {
 		margin-left: 2em;
+		white-space: nowrap;
 	}
 }
 
@@ -53,6 +56,7 @@
 		overflow-y: hidden;
 		overflow-x: auto;
 		flex-wrap: nowrap !important;
+		padding-bottom: 10px; /* Some space for scrollbar on mobile */
 	}
 
 	.wp-block-column {
