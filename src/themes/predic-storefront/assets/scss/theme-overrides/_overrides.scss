@@ -2,6 +2,13 @@
 # Parent theme overrides
 -------------------------------------------------------------- */
 
+/* Add some margin after header */
+body:not(.single-product) {
+	#content {
+		margin-top: 2em;
+	}
+}
+
 /* Make all pages full width to parent container as we have no sidebar */
 #content {
 	#primary {
