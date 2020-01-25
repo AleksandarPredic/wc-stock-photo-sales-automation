@@ -26,6 +26,12 @@ class ImporterImages implements ImporterImagesInterface
      */
     private const IMAGE_QUALITY   = 80;
 
+	/**
+	 * Optimize images before WP import them
+	 * @var bool
+	 */
+    private $optimizeImages = false;
+
     /**
      * @var string
      */
@@ -113,8 +119,10 @@ class ImporterImages implements ImporterImagesInterface
          *
          * https://packagist.org/packages/spatie/image-optimizer
          */
-        $optimizerChain = ImageOptimizer::create();
-        $optimizerChain->optimize($tmpFilePath);
+        if ($this->optimizeImages) {
+			$optimizerChain = ImageOptimizer::create();
+			$optimizerChain->optimize($tmpFilePath);
+		}
 
         $fileArray = [
             'name'     => $filename,

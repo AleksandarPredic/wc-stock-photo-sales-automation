@@ -99,10 +99,11 @@ class ImporterController implements ControllerInterface
 
     public function import()
     {
-        var_dump($_POST);
-        var_dump($_FILES);
+    	$nonce = isset($_POST[$this->formNonceName]) ? $_POST[$this->formNonceName] : '';
 
-        // TODO: Nonce check
+		if ( ! wp_verify_nonce( $nonce, $this->formAction ) ) {
+			die( esc_html__( 'Security check', 'predic-wc-photography' ) );
+		}
 
         // TODO: make ajax method to call this for each uploaded image as we can't handle more than 10 images - safe way
         // and to avoid this Warning: Maximum number of allowable file uploads has been exceeded in Unknown on line 0
