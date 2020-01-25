@@ -63,6 +63,8 @@ abstract class TaxonmyFromPLugin
             return;
         }
 
+        $postId = get_the_ID();
+
         $terms = wp_get_post_terms(get_the_ID(), $this->taxonomy, ['fields' => 'ids']);
 
         if (empty($terms) || is_wp_error($terms) || ! is_array($terms)) {
@@ -74,6 +76,7 @@ abstract class TaxonmyFromPLugin
         $args = [
             'post_type'      => 'product',
             'post_status'    => 'publish',
+            'post__not_in'   => [$postId],
             'nopaging'       => true,
             'fields'         => 'ids',
             'posts_per_page' => $this->postsPerPage,
