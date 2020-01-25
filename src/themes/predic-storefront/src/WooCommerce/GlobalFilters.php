@@ -2,7 +2,7 @@
 
 namespace PredicStorefront\WooCommerce;
 
-use PredicStorefront\Contracts\CustomzeClassInterface;
+use PredicStorefront\Contracts\UsingHooksInterface;
 use PredicStorefront\Traits\SingletonTrait;
 
 /**
@@ -10,7 +10,7 @@ use PredicStorefront\Traits\SingletonTrait;
  *
  * @package PredicStorefront\WooCommerce
  */
-class GlobalFilters implements CustomzeClassInterface
+class GlobalFilters implements UsingHooksInterface
 {
 	use SingletonTrait;
 

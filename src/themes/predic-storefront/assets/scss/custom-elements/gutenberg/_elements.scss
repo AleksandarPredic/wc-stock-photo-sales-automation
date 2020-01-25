@@ -2,6 +2,13 @@
 # Custom elements - from Gutenberg
 -------------------------------------------------------------- */
 
+/* Global - columns */
+.ps-columns--2 {
+	@media screen and (max-width: $brakepoint__md-max) {
+		@include gutenbert-2columns-responsive();
+	}
+}
+
 /* Home hero - first section after header */
 .ps-home-hero {
 	.wp-block-column:first-child {

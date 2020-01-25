@@ -33,6 +33,10 @@
 	justify-content: center;
 	align-items: flex-start;
 
+	.wp-block-column {
+		width: 100%;
+	}
+
 	.wp-block-column:first-child {
 		margin-right: 0 !important;
 		padding-right: 0 !important;

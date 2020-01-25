@@ -37,6 +37,7 @@ require 'vendor/autoload.php';
 \PredicStorefront\WooCommerce\ContentSingleProduct::getInstance()->init();
 
 /**
- * Parent theme
+ * Parent theme overrides
  */
 \PredicStorefront\ParentTheme\RemoveActions::getInstance()->init();
+\PredicStorefront\ParentTheme\ThemeOverrides::getInstance()->init();

@@ -2,13 +2,13 @@
 
 namespace PredicStorefront\ParentTheme;
 
-use PredicStorefront\Contracts\CustomzeClassInterface;
+use PredicStorefront\Contracts\UsingHooksInterface;
 use PredicStorefront\Traits\SingletonTrait;
 
 /**
  * Class RemoveActions
  */
-class RemoveActions implements CustomzeClassInterface
+class RemoveActions implements UsingHooksInterface
 {
     use SingletonTrait;
 

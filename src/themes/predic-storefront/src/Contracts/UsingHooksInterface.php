@@ -3,11 +3,11 @@
 namespace PredicStorefront\Contracts;
 
 /**
- * Interface CustomzeClassInterface
+ * Interface UsingHooksInterface
  *
  * @package PredicStorefront\Contracts
  */
-interface CustomzeClassInterface
+interface UsingHooksInterface
 {
     /**
      * Add needed hooks
