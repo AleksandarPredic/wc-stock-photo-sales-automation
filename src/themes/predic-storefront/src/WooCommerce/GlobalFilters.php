@@ -75,7 +75,7 @@ class GlobalFilters implements UsingHooksInterface
 		add_filter('storefront_woocommerce_args', function ($args) {
 			return array(
 				'single_image_width'    => 1024,
-				'thumbnail_image_width' => 330,
+				'thumbnail_image_width' => 520,
 				'product_grid'          => array(
 					'default_columns' => 4,
 					'default_rows'    => 6,
