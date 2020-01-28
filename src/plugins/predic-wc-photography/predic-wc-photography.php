@@ -22,6 +22,7 @@ use PredicWCPhoto\Controllers\ActivationController;
  * Uradi npm run prod pred postavljanje
  * Na single product dodati request buyout
  * Add setting for enabling image optimizer
+ * VAZNO: Onemoguciti direktan pristup fotografijama u uploads folder-u ako neko pokusa direktno da preuzme fotografije, a da kupac moze da ih preuzme
  */
 
 // Do not allow directly accessing this file.
