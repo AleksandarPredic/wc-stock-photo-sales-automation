@@ -76,6 +76,11 @@ class ImporterDownloadFiles implements ImporterDownloadFilesInterface
         $this->mkDir($filePathParentProductFolder);
         $moved = copy($imagePath, $filePath);
 
+		/**
+		 * Prevent direct access to images to prevent unauthorized download
+		 */
+        chmod($filePath, 0640);
+
         if (! $moved) {
             throw new \Exception(
                 sprintf(
